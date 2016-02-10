@@ -12,47 +12,50 @@ db = SQLAlchemy()
 ##############################################################################
 # Model definitions
 
-class User(db.Model):
-    """User of ratings website."""
+class Artist(db.Model):
+    """Musical artist items"""
 
-    __tablename__ = "users"
+    __tablename__ = "artists"
 
-    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    email = db.Column(db.String(64), nullable=True)
-    password = db.Column(db.String(64), nullable=True)
-    age = db.Column(db.Integer, nullable=True)
-    zipcode = db.Column(db.String(15), nullable=True)
+    artist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    artist_name = db.Column(db.String(100), nullable=False)
+    en_artist_id = db.Column(db.Integer, nullable=False)
 
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<User user_id=%s email=%s>" % (self.user_id, self.email)
-
-# Put your Movie and Rating model classes here.
-
-class Movie(db.Model):
-    """Movie items of ratings website."""
-
-    __tablename__ = "movies"
-
-    movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
-    released_at = db.Column(db.DateTime, nullable=True)
-    imdb_url = db.Column(db.String(200), nullable=True)
 
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<Movie movie_id=%s title=%s>" % (self.movie_id, self.title)
+        return "<Artist artist_id=%s artist_name=%s>" % (self.artist_id, self.artist_name)
 
 
-class Rating(db.Model):
-    """Movie ratings."""
 
-    __tablename__ = "ratings"
+class Song(db.Model):
+    """Song title and attributes"""
 
-    rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    __tablename__ = "Songs"
+
+    song_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    song_title = db.Column(db.String(100), nullable=False)
+    en_song_id = db.Column(db.Integer, nullable=False)
+    
+    # artist_id should be set up as a foreign key from the artist tablename
+    artist_id = db.Column(db.Integer, nullable=False)
+
+    # genre
+    # pick a couple other attributes
+
+    def __repr__(self):
+        """Provides helpful representation when printed."""
+
+        return "<Song movie_id=%s song_title=%s>" % (self.song_id, self.song_title)
+
+
+class Playlist(db.Model):
+    """Playlist"""
+
+    __tablename__ = "Playlists"
+
+    playlist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'))
     # Good idea to build foreign key into the db.Column. Foreign key takes the parameter of the string
     # "tablename.fieldname"
