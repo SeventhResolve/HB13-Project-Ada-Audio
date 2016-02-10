@@ -8,7 +8,7 @@ from model import connect_to_db, db
 
 import requests
 import json
-
+# import api_helper - doesn't work this way?
 
 app = Flask(__name__)
 
@@ -28,9 +28,12 @@ def index():
     return render_template('homesearchpage.html')
 
 @app.route('/search_urlify')
-def turn_into_url(artist, song):
+def turns_search_into_en_dict(artist, song):
     """Input artist and song titile then function will insert into an 
-    echonest get requst"""
+    echonest GET request and returns a dictionary"""
+
+    artist = str(artist)
+    song = str(song)
 
     payload = {'title': song, 'artist': artist}
 
@@ -40,20 +43,27 @@ def turn_into_url(artist, song):
     print (r.url)
 
     # binds dictionary from get request to variable
-    adict = r.json()
+    dict_from_en_api = r.json()
 
-    pprint(adict)
+    pprint(dict_from_en_api)
 
-if __name__ == "__main__":
-    # We have to set debug=True here, since it has to be True at the point
-    # that we invoke the DebugToolbarExtension
-    app.debug = True
+    return dict_from_en_api
 
-    connect_to_db(app)
+def add_search_to_database():
+    ''' passes in a dictionary to the add_to_database function from 
+        api_helper.api so add searchc to db
+    '''    
 
-    # Use the DebugToolbar
-    DebugToolbarExtension(app)
+# if __name__ == "__main__":
+#     # We have to set debug=True here, since it has to be True at the point
+#     # that we invoke the DebugToolbarExtension
+#     app.debug = True
 
-    app.run()
+#     connect_to_db(app)
 
-turn_into_url('beatles', 'hey jude')
+#     # Use the DebugToolbar
+#     DebugToolbarExtension(app)
+
+#     app.run()
+
+turns_search_into_en_dict('beatles', 'hey jude')
