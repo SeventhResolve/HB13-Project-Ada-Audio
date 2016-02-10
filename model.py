@@ -21,6 +21,7 @@ class Artist(db.Model):
     artist_name = db.Column(db.String(100), nullable=False)
     en_artist_id = db.Column(db.Integer, nullable=False)
 
+    songs = db.relationship('Song', backref='artists')
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -46,7 +47,10 @@ class Song(db.Model):
     # genre
     # pick a couple other attributes
 
-    artists = db.relationship('Artist', backref='songs')
+    playlists = db.relationship('Playlist',
+                            secondary='song_playlist', 
+                            backref='songplaylist')
+
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -60,27 +64,7 @@ class Playlist(db.Model):
     __tablename__ = "playlists"
 
     playlist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    
-    # artist_id = foreign key from artists table
-    artist_id = db.Column(db.Integer, db.ForeignKey("asdf.asdf"))
 
-    # song_id = foreign key from song table
-    song_id = db.Column(db.Integer, db.ForeignKey("asdf.asdf"))
-
-
-
-    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'))
-    # Good idea to build foreign key into the db.Column. Foreign key takes the parameter of the string
-    # "tablename.fieldname"
-
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    score = db.Column(db.Integer, nullable=False)
-
-    # Define relationship to user
-    user = db.relationship("User", backref=db.backref("ratings", order_by=rating_id))
-
-    # Define relationship to movie
-    movie = db.relationship("Movie", backref=db.backref("ratings", order_by=rating_id))
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -92,8 +76,14 @@ class SongPlaylist(db.Model):
     """M2M Playlist"""
 
     sp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    song_id = foreign key
-    playlist_id = foreign key
+    song_id = db.Column(db.Integer,
+                        db.ForeignKey('songs.song_id'),
+                        nullable=False)
+    playlist_id = db.Column(db.Integer,
+                            db.ForeignKey('playlists.playlist_id'),
+                            nullable=False)
+
+
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -107,7 +97,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ada_audio'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///music'
     db.app = app
     db.init_app(app)
 
