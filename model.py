@@ -39,10 +39,14 @@ class Song(db.Model):
     en_song_id = db.Column(db.Integer, nullable=False)
     
     # artist_id = foreign key from artists table
-    artist_id = db.Column(db.Integer, db.ForeignKey("asdf.asf"))
+    artist_id = db.Column(db.Integer, 
+                        db.ForeignKey("artists.artist_id"), 
+                        nullable=False)
 
     # genre
     # pick a couple other attributes
+
+    artists = db.relationship('Artist', backref='songs')
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -79,7 +83,7 @@ class Playlist(db.Model):
     movie = db.relationship("Movie", backref=db.backref("ratings", order_by=rating_id))
 
     def __repr__(self):
-        """Provide helpful representation when printed."""
+        """Provides helpful representation when printed."""
 
         return "<Playlist playlist_id=%s artist_id=%s song_id=%s>" % (self.playlist_id, self.arist_id, self.song_id)
 
@@ -88,6 +92,13 @@ class SongPlaylist(db.Model):
     """M2M Playlist"""
 
     sp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    song_id = foreign key
+    playlist_id = foreign key
+
+    def __repr__(self):
+        """Provides helpful representation when printed."""
+
+        return "<SongPlaylist sp_id=%s song_id%s playlist_id%s>" % (self.sp_id, self.song_id, self.playlist_id)
 
 ##############################################################################
 # Helper functions
@@ -96,7 +107,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ratings'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ada_audio'
     db.app = app
     db.init_app(app)
 
