@@ -32,14 +32,14 @@ class Artist(db.Model):
 class Song(db.Model):
     """Song title and attributes"""
 
-    __tablename__ = "Songs"
+    __tablename__ = "songs"
 
     song_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     song_title = db.Column(db.String(100), nullable=False)
     en_song_id = db.Column(db.Integer, nullable=False)
     
-    # artist_id should be set up as a foreign key from the artist tablename
-    artist_id = db.Column(db.Integer, nullable=False)
+    # artist_id = foreign key from artists table
+    artist_id = db.Column(db.Integer, db.ForeignKey("asdf.asf"))
 
     # genre
     # pick a couple other attributes
@@ -53,13 +53,21 @@ class Song(db.Model):
 class Playlist(db.Model):
     """Playlist"""
 
-    __tablename__ = "Playlists"
+    __tablename__ = "playlists"
 
     playlist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    
+    # artist_id = foreign key from artists table
+    artist_id = db.Column(db.Integer, db.ForeignKey("asdf.asdf"))
+
+    # song_id = foreign key from song table
+    song_id = db.Column(db.Integer, db.ForeignKey("asdf.asdf"))
+
+
+
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'))
     # Good idea to build foreign key into the db.Column. Foreign key takes the parameter of the string
     # "tablename.fieldname"
-    # ***Don't forget to add db.relationship into both classes***
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     score = db.Column(db.Integer, nullable=False)
@@ -73,7 +81,13 @@ class Playlist(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Rating rating_id=%s movie_id=%s user_id=%s score=%s>" % (self.rating_id, self.movie_id, self.user_id, self.score)
+        return "<Playlist playlist_id=%s artist_id=%s song_id=%s>" % (self.playlist_id, self.arist_id, self.song_id)
+
+
+class SongPlaylist(db.Model):
+    """M2M Playlist"""
+
+    sp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 
 ##############################################################################
 # Helper functions
@@ -94,3 +108,5 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print "Connected to DB."
+
+
