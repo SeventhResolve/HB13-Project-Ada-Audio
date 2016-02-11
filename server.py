@@ -4,11 +4,11 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from pprint import pprint
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db
+from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
+from api_helper import *
 
 import requests
 import json
-# import api_helper - doesn't work this way?
 
 app = Flask(__name__)
 
@@ -27,13 +27,13 @@ def index():
 
     return render_template('homesearchpage.html')
 
-@app.route('/search_urlify')
-def turns_search_into_en_dict(artist, song):
+@app.route('/search_playlistafy')
+def turns_search_into_playlist():
     """Input artist and song titile then function will insert into an 
     echonest GET request and returns a dictionary"""
-
-    artist = str(artist)
-    song = str(song)
+    
+    artist = request.args['artist']
+    song = request.args['song']
 
     payload = {'title': song, 'artist': artist}
 
@@ -47,23 +47,25 @@ def turns_search_into_en_dict(artist, song):
 
     pprint(dict_from_en_api)
 
-    return dict_from_en_api
+    search_list = adds_search_to_database(dict_from_en_api)
 
-def add_search_to_database():
-    ''' passes in a dictionary to the add_to_database function from 
-        api_helper.api so add searchc to db
-    '''    
+    print search_list
 
-# if __name__ == "__main__":
-#     # We have to set debug=True here, since it has to be True at the point
-#     # that we invoke the DebugToolbarExtension
-#     app.debug = True
+    return redirect('/')
+    # have this eventually render_template to /playlist
 
-#     connect_to_db(app)
+@app.route('/playlist')
+def 
 
-#     # Use the DebugToolbar
-#     DebugToolbarExtension(app)
 
-#     app.run()
+if __name__ == "__main__":
+    # We have to set debug=True here, since it has to be True at the point
+    # that we invoke the DebugToolbarExtension
+    app.debug = True
 
-turns_search_into_en_dict('beatles', 'hey jude')
+    connect_to_db(app)
+
+    # Use the DebugToolbar
+    DebugToolbarExtension(app)
+
+    app.run()
