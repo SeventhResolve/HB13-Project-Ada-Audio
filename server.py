@@ -63,7 +63,8 @@ def turns_search_into_playlist():
 
     # This needs foreign keys added into the db which doesn't work...
     song_info = Song(en_song_id=parsed_search_results[2],
-                     song_title=parsed_search_results[3])
+                     song_title=parsed_search_results[3],
+                     artist_id=artist_info.artist_id)
 
     db.session.add(song_info)
     db.session.commit()

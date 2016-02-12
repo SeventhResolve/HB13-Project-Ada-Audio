@@ -45,7 +45,8 @@ class Song(db.Model):
     en_song_id = db.Column(db.String(100), nullable=False)
     
     # artist_id = foreign key from artists table
-    artist_id = db.Column(db.Integer, db.ForeignKey("artists.artist_id"))
+    artist_id = db.Column(db.Integer, db.ForeignKey("[artists.artist_id]"))
+    # !!!! THIS FOREIGN KEY IS DOING SOMETHING WEIRD!!!!!!
 
     # genre
     # pick a couple other attributes
