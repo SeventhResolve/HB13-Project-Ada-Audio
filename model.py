@@ -8,8 +8,6 @@ from flask_sqlalchemy import SQLAlchemy
 # object, where we do most of our interactions (like committing, etc.)
 
 
-DB_URI = 'postgresql:///music'
-
 
 db = SQLAlchemy()
 
@@ -27,7 +25,6 @@ class Artist(db.Model):
     artist_name = db.Column(db.String(100), nullable=False)
     en_artist_id = db.Column(db.String(100), nullable=False)
 
-    songs = db.relationship('Song', backref='artists')
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -48,16 +45,13 @@ class Song(db.Model):
     en_song_id = db.Column(db.String(100), nullable=False)
     
     # artist_id = foreign key from artists table
-    artist_id = db.Column(db.Integer, 
-                        db.ForeignKey("artists.artist_id"), 
-                        nullable=False)
+    artist_id = db.Column(db.Integer, db.ForeignKey("artists.artist_id"))
 
     # genre
     # pick a couple other attributes
 
    
-    artist = db.relationship('Artist', 
-                            backref='songs')
+    artist = db.relationship('Artist', backref=db.backref('songs', order_by=song_id))
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -73,12 +67,14 @@ class Playlist(db.Model):
     __tablename__ = "playlists"
 
     playlist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    playlist_name = db.Column(db.String(100), nullable=False)
 
 
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<Playlist playlist_id=%s>" % (self.playlist_id)
+        return "<Playlist playlist_id=%s playlist_name=%s>" % (self.playlist_id,
+                                                               self.playlist_name)
 
 
 class SongPlaylist(db.Model):
@@ -88,19 +84,17 @@ class SongPlaylist(db.Model):
 
     sp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     song_id = db.Column(db.Integer,
-                        db.ForeignKey('songs.song_id'),
-                        nullable=False)
+                        db.ForeignKey('songs.song_id'))
     playlist_id = db.Column(db.Integer,
-                            db.ForeignKey('playlists.playlist_id'),
-                            nullable=False)
+                            db.ForeignKey('playlists.playlist_id'))
 
     song = db.relationship('Song',
-                            secondary='song_playlists', 
-                            backref=db.backref('songplaylist', order_by=sp_id))
+                            # secondary='song_playlists', 
+                            backref=db.backref('song_playlists', order_by=sp_id))
 
     playlist = db.relationship('Playlist',
-                            secondary='song_playlists', 
-                            backref=db.backref('songplaylist', order_by=sp_id))
+                            # secondary='song_playlists', 
+                            backref=db.backref('song_playlists', order_by=sp_id))
 
     def __repr__(self):
         """Provides helpful representation when printed."""

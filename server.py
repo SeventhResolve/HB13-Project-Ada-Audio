@@ -30,8 +30,8 @@ def index():
 
 @app.route('/search_playlistafy')
 def turns_search_into_playlist():
-    """Input artist and song titile then function will insert into an 
-    echonest GET request and returns a dictionary"""
+    """Converts search into EchoNest GET request and inserts JSON object
+    into database"""
     
     artist = request.args['artist']
     song = request.args['song']
@@ -56,7 +56,7 @@ def turns_search_into_playlist():
     # THIS WORKS but I want to check for duplicates
     artist_info = Artist(en_artist_id=parsed_search_results[0],
                          artist_name=parsed_search_results[1])
-
+    
     db.session.add(artist_info)
     db.session.commit()
 
