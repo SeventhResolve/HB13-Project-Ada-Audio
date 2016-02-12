@@ -55,10 +55,9 @@ class Song(db.Model):
     # genre
     # pick a couple other attributes
 
-    playlists = db.relationship('Playlist',
-                            secondary='song_playlist', 
-                            backref='songplaylist')
-
+   
+    artist = db.relationship('Artist', 
+                            backref='songs')
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -83,7 +82,9 @@ class Playlist(db.Model):
 
 
 class SongPlaylist(db.Model):
-    """M2M Playlist"""
+    """Song/Playlist association table"""
+
+    __tablename__ = "song_playlists"
 
     sp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     song_id = db.Column(db.Integer,
@@ -93,7 +94,13 @@ class SongPlaylist(db.Model):
                             db.ForeignKey('playlists.playlist_id'),
                             nullable=False)
 
+    song = db.relationship('Song',
+                            secondary='song_playlists', 
+                            backref=db.backref('songplaylist', order_by=sp_id))
 
+    playlist = db.relationship('Playlist',
+                            secondary='song_playlists', 
+                            backref=db.backref('songplaylist', order_by=sp_id))
 
     def __repr__(self):
         """Provides helpful representation when printed."""
