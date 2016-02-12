@@ -25,14 +25,16 @@ class Artist(db.Model):
 
     artist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     artist_name = db.Column(db.String(100), nullable=False)
-    en_artist_id = db.Column(db.Integer, nullable=False)
+    en_artist_id = db.Column(db.String(100), nullable=False)
 
     songs = db.relationship('Song', backref='artists')
 
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<Artist artist_id=%s artist_name=%s>" % (self.artist_id, self.artist_name)
+        return "<Artist artist_id=%s artist_name=%s en_artist_id=%s>" % (self.artist_id, 
+                                                                         self.artist_name,
+                                                                         self.en_artist_id)
 
 
 
@@ -43,7 +45,7 @@ class Song(db.Model):
 
     song_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     song_title = db.Column(db.String(100), nullable=False)
-    en_song_id = db.Column(db.Integer, nullable=False)
+    en_song_id = db.Column(db.String(100), nullable=False)
     
     # artist_id = foreign key from artists table
     artist_id = db.Column(db.Integer, 
@@ -61,7 +63,9 @@ class Song(db.Model):
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<Song movie_id=%s song_title=%s>" % (self.song_id, self.song_title)
+        return "<Song movie_id=%s song_title=%s en_song_id=%s>" % (self.song_id, 
+                                                                   self.song_title,
+                                                                   self.en_song_id)
 
 
 class Playlist(db.Model):
@@ -75,7 +79,7 @@ class Playlist(db.Model):
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<Playlist playlist_id=%s artist_id=%s song_id=%s>" % (self.playlist_id, self.arist_id, self.song_id)
+        return "<Playlist playlist_id=%s>" % (self.playlist_id)
 
 
 class SongPlaylist(db.Model):

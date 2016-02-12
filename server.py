@@ -42,7 +42,7 @@ def turns_search_into_playlist():
     r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=U1KN7HSV9GGNANZJ2&format=json&results=1&", params=payload)
     
     # Debugging print statement
-    print (r.url)
+    # print (r.url)
 
     # binds dictionary from get request to variable
     dict_from_en_api = r.json()
@@ -53,11 +53,29 @@ def turns_search_into_playlist():
     # fn from api_helper.py - artist_id, artist, song_id, song
     parsed_search_results = parses_en_json_results(dict_from_en_api)
 
-    import pdb; pdb.set_trace()
+    # THIS WORKS but I want to check for duplicates
+    artist_info = Artist(en_artist_id=parsed_search_results[0],
+                         artist_name=parsed_search_results[1])
 
-    while db.session.execute(QUERY, {en_artist_id: parsed_search_results[0]}).one() != parsed_search_results[0]:
-        Artist.query.insert(en_artist_id=parsed_search_results[0], 
-                            artist_name=parsed_search_results[1])
+    db.session.add(artist_info)
+    db.session.commit()
+
+
+    # This needs foreign keys added into the db which doesn't work...
+    song_info = Song(en_song_id=parsed_search_results[2],
+                     song_title=parsed_search_results[3])
+
+    db.session.add(song_info)
+    db.session.commit()
+
+    # artist_info = Artist(en_artist_id=parsed_search_results[0],
+    #                      artist_name=parsed_search_results[1])
+
+    # QUERY = 'SELECT en_artist_id FROM Artist WHERE en_artist_id='
+
+    # while is_in_artist_table != parsed_search_results[0]:
+    #     db.session.add(artist_info)
+    #     db.session.commit()
 
 
     """ takes the artist_id and queries artist table, if artist_id
