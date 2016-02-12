@@ -1,7 +1,6 @@
 
 
-def convert_json_to_items(dict_from_en_api):
-# change name
+def parses_en_json_results(dict_from_en_api):
 
     ''' *** From a song/artist search ***
     1. takes the json dictionary from turns_search_into_en_dict from server.py
@@ -20,9 +19,6 @@ def convert_json_to_items(dict_from_en_api):
     print song_id
     print song_title
 
-def add_search_to_database():
-    ''' passes in a dictionary to the add_to_database function from 
-        api_helper.api so add search to db
-    '''    
-    pass
-    
+    parsed_search_results = [artist_id, artist_name, song_id, song_title]
+
+    return parsed_search_results
