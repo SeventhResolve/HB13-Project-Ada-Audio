@@ -4,14 +4,13 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from pprint import pprint
 from flask_debugtoolbar import DebugToolbarExtension
-# from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
-# ******* moved into seed.py
-from api_helper import *
+from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
 from flask_sqlalchemy import SQLAlchemy
+from api_helper import *
+from seed import *
 
 import os
-# import requests
-# ******* move into seed.py
+import requests
 import json
 
 app = Flask(__name__)
@@ -57,10 +56,9 @@ def turns_search_into_playlist():
     # Debugging print statement
     pprint(dict_from_en_api)
 
+    parsed_search_results = parses_en_json_results(dict_from_en_api)
 
-    # ******** v moved into seed.py
-    # parsed_search_results = parses_en_json_results(dict_from_en_api)
-
+    added_to_db = adds_en_json_results_to_db(parsed_search_results)
     # # THIS WORKS but I want to check for duplicates
     # artist_info = Artist(en_artist_id=parsed_search_results[0],
     #                      artist_name=parsed_search_results[1])
@@ -88,7 +86,7 @@ if __name__ == "__main__":
     # that we invoke the DebugToolbarExtension
     app.debug = True
 
-    # connect_to_db(app)
+    connect_to_db(app)
     '''Do I need to connect to db?'''
 
     # Use the DebugToolbar

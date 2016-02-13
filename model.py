@@ -23,7 +23,7 @@ class Artist(db.Model):
 
     artist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     artist_name = db.Column(db.String(100), nullable=False)
-    en_artist_id = db.Column(db.String(100), nullable=False)
+    en_artist_id = db.Column(db.String(100), nullable=False, unique=True)
 
  
     def __repr__(self):
@@ -42,7 +42,7 @@ class Song(db.Model):
 
     song_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     song_title = db.Column(db.String(100), nullable=False)
-    en_song_id = db.Column(db.String(100), nullable=False)
+    en_song_id = db.Column(db.String(100), nullable=False, unique=True)
     
     # artist_id = foreign key from artists table
     artist_id = db.Column(db.Integer, db.ForeignKey("artists.artist_id"))
