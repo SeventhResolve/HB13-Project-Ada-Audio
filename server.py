@@ -8,6 +8,7 @@ from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
 from api_helper import *
 from flask_sqlalchemy import SQLAlchemy
 
+import os
 import requests
 import json
 
@@ -20,7 +21,7 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
-
+            
 
 @app.route('/')
 def index():
@@ -32,17 +33,21 @@ def index():
 def turns_search_into_playlist():
     """Converts search into EchoNest GET request and inserts JSON object
     into database"""
-    
+
+    en_key = os.environ['ECHONEST_API_KEY']
+    # yt_browser_key = os.environ['YOUTUBE_BROWSER_KEY']
+
     artist = request.args['artist']
     song = request.args['song']
+
 
     # From request library
     payload = {'title': song, 'artist': artist}
 
-    r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=U1KN7HSV9GGNANZJ2&format=json&results=1&", params=payload)
+    r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=%(en_key)s&format=json&results=1&" % locals(), params=payload)
     
     # Debugging print statement
-    # print (r.url)
+    print (r.url)
 
     # binds dictionary from get request to variable
     dict_from_en_api = r.json()
@@ -50,7 +55,7 @@ def turns_search_into_playlist():
     # Debugging print statement
     pprint(dict_from_en_api)
 
-    # fn from api_helper.py - artist_id, artist, song_id, song
+    fn from api_helper.py - artist_id, artist, song_id, song
     parsed_search_results = parses_en_json_results(dict_from_en_api)
 
     # THIS WORKS but I want to check for duplicates
@@ -69,21 +74,6 @@ def turns_search_into_playlist():
     db.session.add(song_info)
     db.session.commit()
 
-    # artist_info = Artist(en_artist_id=parsed_search_results[0],
-    #                      artist_name=parsed_search_results[1])
-
-    # QUERY = 'SELECT en_artist_id FROM Artist WHERE en_artist_id='
-
-    # while is_in_artist_table != parsed_search_results[0]:
-    #     db.session.add(artist_info)
-    #     db.session.commit()
-
-
-    """ takes the artist_id and queries artist table, if artist_id
-    doesn't exist, add artist info to table. 
-      also takes the song_id and and queries song table, if song_id
-    doesn't exist, add song info to table.
-    """
 
     return render_template('playlist.html')
 
@@ -95,7 +85,8 @@ if __name__ == "__main__":
     # that we invoke the DebugToolbarExtension
     app.debug = True
 
-    connect_to_db(app)
+    # connect_to_db(app)
+    '''Do I need to connect to db?'''
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)

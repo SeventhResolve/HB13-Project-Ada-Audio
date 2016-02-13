@@ -25,7 +25,7 @@ class Artist(db.Model):
     artist_name = db.Column(db.String(100), nullable=False)
     en_artist_id = db.Column(db.String(100), nullable=False)
 
-
+ 
     def __repr__(self):
         """Provides helpful representation when printed."""
 
@@ -45,8 +45,7 @@ class Song(db.Model):
     en_song_id = db.Column(db.String(100), nullable=False)
     
     # artist_id = foreign key from artists table
-    artist_id = db.Column(db.Integer, db.ForeignKey("[artists.artist_id]"))
-    # !!!! THIS FOREIGN KEY IS DOING SOMETHING WEIRD!!!!!!
+    artist_id = db.Column(db.Integer, db.ForeignKey("artists.artist_id"))
 
     # genre
     # pick a couple other attributes
