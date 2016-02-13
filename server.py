@@ -5,11 +5,13 @@ from flask import Flask, render_template, redirect, request, flash, session
 from pprint import pprint
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
+# ******* ^ move into seed.py
 from api_helper import *
 from flask_sqlalchemy import SQLAlchemy
 
 import os
 import requests
+# ******* ^ move into seed.py
 import json
 
 app = Flask(__name__)
@@ -55,7 +57,6 @@ def turns_search_into_playlist():
     # Debugging print statement
     pprint(dict_from_en_api)
 
-    fn from api_helper.py - artist_id, artist, song_id, song
     parsed_search_results = parses_en_json_results(dict_from_en_api)
 
     # THIS WORKS but I want to check for duplicates
