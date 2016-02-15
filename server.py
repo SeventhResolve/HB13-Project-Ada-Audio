@@ -2,14 +2,13 @@
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
-from pprint import pprint
+
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
 from flask_sqlalchemy import SQLAlchemy
 from api_helper import *
 from seed import *
 
-import os
 import requests
 import json
 
@@ -31,34 +30,56 @@ def index():
     return render_template('homesearchpage.html')
 
 @app.route('/search_playlistafy')
-def turns_search_into_playlist():
+def gets_user_serach_results():
     """Converts search into EchoNest GET request and inserts JSON object
     into database"""
 
-    en_key = os.environ['ECHONEST_API_KEY']
-    # yt_browser_key = os.environ['YOUTUBE_BROWSER_KEY']
+   
 
     artist = request.args['artist']
     song = request.args['song']
 
+    # Converts search into titles
+    artist_str = str(artist.title())
+    song_str = str(song.title())
 
-    # From request library
-    payload = {'title': song, 'artist': artist}
+    artist_and_song = [artist_str, song_str]
 
-    r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=%(en_key)s&format=json&results=1&" % locals(), params=payload)
+    print "Artist and song list ", artist_and_song
+
+    is_in_db = song_query_db(artist_and_song)
+
+    print is_in_db
+
+
+    return render_template('playlist.html')
+    #
+
+
+
+# Need to be able to query database to see if en_song_id/en_artist_id,
+# yt_artist_id/yt_artist_id exists. If it exists, get the ids. If not
+# add to db
+
+
+
+    # # From request library, adds search to db
+    # payload = {'title': song, 'artist': artist}
+
+    # r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=%(en_key)s&format=json&results=1&" % locals(), params=payload)
     
-    # Debugging print statement
-    print (r.url)
+    # # Debugging print statement
+    # print (r.url)
 
-    # binds dictionary from get request to variable
-    dict_from_en_api = r.json()
+    # # binds dictionary from get request to variable
+    # dict_from_en_api = r.json()
 
-    # Debugging print statement
-    pprint(dict_from_en_api)
+    # # Debugging print statement
+    # pprint(dict_from_en_api)
 
-    parsed_search_results = parses_en_json_results(dict_from_en_api)
+    # parsed_search_results = parses_en_json_results(dict_from_en_api)
 
-    added_to_db = adds_en_json_results_to_db(parsed_search_results)
+    # added_to_db = adds_en_json_results_to_db(parsed_search_results)
     # # THIS WORKS but I want to check for duplicates
     # artist_info = Artist(en_artist_id=parsed_search_results[0],
     #                      artist_name=parsed_search_results[1])
@@ -74,6 +95,9 @@ def turns_search_into_playlist():
 
     # db.session.add(song_info)
     # db.session.commit()
+
+
+def renders_yt_playlist():
 
 
     return render_template('playlist.html')
