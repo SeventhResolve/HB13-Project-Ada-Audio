@@ -103,6 +103,18 @@ class SongPlaylist(db.Model):
 
         return "<SongPlaylist sp_id=%s song_id%s playlist_id%s>" % (self.sp_id, self.song_id, self.playlist_id)
 
+class YouTubeVideos(db.Model):
+
+    __tablename__ = 'youtube_videos'
+
+    video_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    yt_id = db.Column(db.String(100), nullable=False, unique=True)
+    artist_id = db.Column(db.Integer,
+                          db.ForeignKey('artists.artist_id'))
+
+    artist = db.relationship('Artist',
+                              backref=db.backref('artists', order_by=video_id))
+
 ##############################################################################
 # Helper functions
 

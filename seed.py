@@ -1,6 +1,5 @@
 from model import db, Artist, Song, Playlist, SongPlaylist
 from pprint import pprint
-# from server import *
 
 import requests
 import os
@@ -87,3 +86,11 @@ def adds_en_json_results_to_db(parsed_search_results):
             # for debugging
             print "^^^^^^^^^ Song Breaked"
             break
+
+##############################################
+
+if __name__ == "__main__":
+
+    connect_to_db(app)
+
+    

@@ -72,10 +72,8 @@ def populate_database(artist_and_song):
 
 def artist_query_db(artist_and_song):
     """Takes the artist, queries db for duplicates"""
-    # Working on this pathway
-    pass
 
-    # from server.py fn=
+    # from server.py
     artist = artist_and_song[0]
 
 
@@ -91,48 +89,3 @@ def artist_query_db(artist_and_song):
         # add artist's EN ID to database
         return query_artist_en_id(artist)
 
-# def query_song_apis(artist, song):
-
-#     # Debugging
-#     print "Got to query_song_api fn"
-
-#     payload = {'title': song, 'artist': artist}
-
-#     r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=%(en_key)s&format=json&results=1&" % locals(), params=payload)
-    
-#     # Debugging print statement
-#     print (r.url)
-
-#     # binds dictionary from get request to variable
-#     dict_from_en_api = r.json()
-
-#     # Debugging print statement
-#     pprint(dict_from_en_api)
-
-# def parses_en_json_results(dict_from_en_api):
-
-#     ''' *** From a song/artist search ***
-#     1. takes the json dictionary from turns_search_into_en_dict from server.py
-#     parses through the dictionary
-#     2. pulls out artist_id, artist, song, and song_id.
-#     3. adds each item to the add_to_database
-#     '''
-
-#     artist_id = dict_from_en_api['response']['songs'][0]['artist_id']
-#     artist_name = dict_from_en_api['response']['songs'][0]['artist_name']
-#     song_id = dict_from_en_api['response']['songs'][0]['id']
-#     song_title = dict_from_en_api['response']['songs'][0]['title']
-
-#     # prints for debugging
-#     print artist_id
-#     print artist_name
-#     print song_id
-#     print song_title
-
-#     parsed_search_results = [artist_id, artist_name, song_id, song_title]
-
-#     return parsed_search_results
-
-# def parses_yt_json_results(dict_from_yt_api):
-
-#     pass

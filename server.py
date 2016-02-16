@@ -49,6 +49,7 @@ def gets_user_serach_results():
     # fn in api_helper.py
     artist_and_song = queries_song_db(artist_and_song)
     adds_to_db = populate_database(artist_and_song)
+    artist_query = queries_artist_db(artist_and_song)
 
 
     return render_template('playlist.html')
