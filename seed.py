@@ -6,7 +6,7 @@ import requests
 import os
 
 
-def gets_json_from_apis(artist_and_song):
+def gets_json_from_en_api(artist_and_song):
     """If songs aren't in db, get the api jsons"""
 
     en_key = os.environ['ECHONEST_API_KEY']

@@ -53,7 +53,7 @@ def queries_song_db(artist_and_song):
 def populate_database(artist_and_song):
     """Adds song to db using seed.py"""
     
-    step_one = gets_json_from_apis(artist_and_song)
+    step_one = gets_json_from_en_api(artist_and_song)
     step_two = parses_en_json_results(step_one)
     step_three = adds_en_json_results_to_db(step)
 

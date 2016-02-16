@@ -53,7 +53,7 @@ def gets_user_serach_results():
         # yay there a song
         print "Server.py Yay there's a song and artist in the db!!!!"
 
-    print is_song_in_db
+    # print is_song_in_db
 
 
     return render_template('playlist.html')
