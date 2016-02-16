@@ -9,7 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 from api_helper import *
 from seed import *
 
-import requests
 import json
 
 app = Flask(__name__)
@@ -45,11 +44,16 @@ def gets_user_serach_results():
 
     artist_and_song = [artist_str, song_str]
 
-    print "Artist and song list ", artist_and_song
+    print "server.py Artist and song list ", artist_and_song
 
-    is_in_db = song_query_db(artist_and_song)
+    # fn in api_helper.py
+    is_song_in_db = queries_song_db(artist_and_song)
 
-    print is_in_db
+    if is_song_in_db == True:
+        # yay there a song
+        print "Server.py Yay there's a song and artist in the db!!!!"
+
+    print is_song_in_db
 
 
     return render_template('playlist.html')
@@ -99,6 +103,7 @@ def gets_user_serach_results():
 
 def renders_yt_playlist():
 
+    pass
 
     return render_template('playlist.html')
 
