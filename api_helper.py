@@ -13,27 +13,49 @@ import json
 def queries_song_db(artist_and_song):
     """Takes the song, queries db for duplicates and adds unique enteries"""
 
+    artist = artist_and_song[0]
     song = artist_and_song[1]
 
     # returns True or false if artist or song is in db
     is_song_in_db = db.session.query(exists().where(Song.song_title==song)).scalar()
+    # is_artist_in_db = db.session.query(exists().where(Artist.artist_name==artist)).scalar()
 
     # Debugging
     print "api_help Is song in db? %s" % (is_song_in_db)
 
+
+
     if is_song_in_db == True:
         # Debugging
-        print "api_help This song is in the db", song
-        return is_song_in_db
+        print "api_helper This song is in the db", song
+        
+        # Query to see if song's artist_id and the artist artist_id matches
+        # get_song_info = db.session.query(Song.artist_id).filter(Song.song_title==song).all()
+        get_song_info = db.session.query(Song.artist_id).all()
+
+        # Yay debugging!
+        print "THIS is the song info", get_song_info
+        print "THIS is the TYPE", type(get_song_info)
+
+        get_artist_info = Artist.query.filter(Artist.artist_name==artist).all()
+
+
+
+        # get_artist_id = Artist.query.get(artist_name)
+
+    elif (is_song_in_db and is_artist_in_db) == False:
+        return adds_artist_and_song_to_db(artist_and_song)  
+
     else:
         # add song's YT and EN ID's to database
-        return adds_artist_and_song_to_db(artist_and_song)
+        return populate_database(artist_and_song)
 
-def adds_artist_and_song_to_db(artist_and_song):
+def populate_database(artist_and_song):
     """Adds song to db using seed.py"""
+    
     step_one = gets_json_from_apis(artist_and_song)
     step_two = parses_en_json_results(step_one)
-    step_three = adds_en_json_results_to_db(step_two)
+    step_three = adds_en_json_results_to_db(step)
 
     print "api help Song and artist info added to db"
 

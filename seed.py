@@ -29,14 +29,7 @@ def gets_json_from_apis(artist_and_song):
     return dict_from_en_api
 
 def parses_en_json_results(dict_from_en_api):
-
-    ''' *** From a song/artist search ***
-    1. takes the json dictionary from turns_search_into_en_dict from server.py
-    parses through the dictionary
-    2. pulls out artist_id, artist, song, and song_id.
-    '''
-
-
+    ''' Parses EN JSON results'''
 
     artist_id = dict_from_en_api['response']['songs'][0]['artist_id']
     artist_name = dict_from_en_api['response']['songs'][0]['artist_name']
@@ -58,49 +51,38 @@ def parses_en_json_results(dict_from_en_api):
 def adds_en_json_results_to_db(parsed_search_results):
     ''' Seeds the database with results from parses_en_json_results'''
 
-    
-    artist_info = Artist(en_artist_id=parsed_search_results[0],
-                         artist_name=parsed_search_results[1])
-    
+
+    # checks for duplicate EN artist IDs
+    while True:
+        try:
+            db.session.add(artist_info)
+            db.session.commit()
+
+            # for debugging
+            print '######## Artist Tried'
+            break
+        except:
+            
+            # for debugging
+            print "^^^^^^^^^Artist Breaked"
+            break       
+
+
     song_info = Song(en_song_id=parsed_search_results[2],
                      song_title=parsed_search_results[3],
                      artist_id=artist_info.artist_id)
 
-    db.session.add(artist_info)
-    db.session.add(song_info)
-    db.session.commit()
+    # checks for duplicate EN song IDs
+    while True:
+        try:
+            db.session.add(song_info)
+            db.session.commit()
 
-    # # checks for duplicate EN artist IDs
-    # while True:
-    #     try:
-    #         db.session.add(artist_info)
-    #         db.session.commit()
-
-    #         # for debugging
-    #         print '######## Artist Tried'
-    #         break
-    #     except:
+            # for debugging
+            print '######## Song Tried'
+            break
+        except:
             
-    #         # for debugging
-    #         print "^^^^^^^^^Artist Breaked"
-    #         break       
-
-
-    # song_info = Song(en_song_id=parsed_search_results[2],
-    #                  song_title=parsed_search_results[3],
-    #                  artist_id=artist_info.artist_id)
-
-    # # checks for duplicate EN song IDs
-    # while True:
-    #     try:
-    #         db.session.add(song_info)
-    #         db.session.commit()
-
-    #         # for debugging
-    #         print '######## Song Tried'
-    #         break
-    #     except:
-            
-    #         # for debugging
-    #         print "^^^^^^^^^ Song Breaked"
-    #         break
+            # for debugging
+            print "^^^^^^^^^ Song Breaked"
+            break

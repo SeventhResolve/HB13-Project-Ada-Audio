@@ -2,8 +2,8 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import *
-from sqlalchemy.orm import *
+# from sqlalchemy import *
+# from sqlalchemy.orm import *
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -58,7 +58,7 @@ class Song(db.Model):
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<Song movie_id=%s song_title=%s en_song_id=%s>" % (self.song_id, 
+        return "<Song song_id=%s song_title=%s en_song_id=%s>" % (self.song_id, 
                                                                    self.song_title,
                                                                    self.en_song_id)
 
