@@ -51,7 +51,8 @@ def parses_en_json_results(dict_from_en_api):
 def adds_en_json_results_to_db(parsed_search_results):
     ''' Seeds the database with results from parses_en_json_results'''
 
-
+    artist_info = Artist(en_artist_id=parsed_search_results[0],
+                         artist_name=parsed_search_results[1])
     # checks for duplicate EN artist IDs
     while True:
         try:

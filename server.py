@@ -44,16 +44,11 @@ def gets_user_serach_results():
 
     artist_and_song = [artist_str, song_str]
 
-    print "server.py Artist and song list ", artist_and_song
+    print "server.py User search artist and song list ", artist_and_song
 
     # fn in api_helper.py
-    is_song_in_db = queries_song_db(artist_and_song)
-
-    if is_song_in_db == True:
-        # yay there a song
-        print "Server.py Yay there's a song and artist in the db!!!!"
-
-    # print is_song_in_db
+    artist_and_song = queries_song_db(artist_and_song)
+    adds_to_db = populate_database(artist_and_song)
 
 
     return render_template('playlist.html')
