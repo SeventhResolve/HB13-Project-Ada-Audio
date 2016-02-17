@@ -48,44 +48,44 @@ def queries_song_db(artist_and_song):
         # If the list is all False then the search is a unique song/artist combo  
         if any(contains_true_or_false) == True:
             print "Super uber checked. Song exists in db."
-            # return "Render playlist/video"
+            return "In db"
         else:
             print "Super uber checked. Song/artist combo doesn't exist in db."
-            return artist_and_song
+            return "Add to db"
     else:
         print "api_helper populating db"
-        return artist_and_song
+        return "Add to db"
 
 def populate_database(artist_and_song):
     """Adds song to db using seed.py"""
-    print "populating db!"
+    print "populating db! with ", artist_and_song
 
     step_one = gets_json_from_en_api(artist_and_song)
     print "api helper, populate_database Step one complete!"
     step_two = parses_en_json_results(step_one)
     print "api helper, populate_database Step two complete!"
-    step_three = adds_en_json_results_to_db(step_two)
+    step_three = adds_en_artist_results_to_db(step_two)
     print "api helper, populate_database Step three complete!"
-
+    step_four = adds_en_song_results_to_db(step_two)
+    print "api helper, populate_database Step four complete!"
 
     return "api helper Song and artist info added to db"
 
-def artist_query_db(artist_and_song):
+def queries_artist_db(artist_and_song):
     """Takes the artist, queries db for duplicates"""
+    pass
+    # # from server.py
+    # artist = artist_and_song[0]
 
-    # from server.py
-    artist = artist_and_song[0]
 
+    # # returns True or false if artist or song is in db
+    # is_artist_in_db = db.session.query(exists().where(Artist.artist_name==artist)).scalar()
 
-    # returns True or false if artist or song is in db
-    is_artist_in_db = db.session.query(exists().where(Artist.artist_name==artist)).scalar()
+    # # Debugging
+    # print is_artist_in_db
 
-    # Debugging
-    print is_artist_in_db
-
-    if is_artist_in_db == False:
-        return artist
-    else:
-        # add artist's EN ID to database
-        return query_artist_en_id(artist)
-
+    # if is_artist_in_db == False:
+    #     return "api helper queries_artist_db HEY artist is in db"
+    # else:
+    #     # add artist's EN ID to database
+    #     return "api helper queries_artist_db OOPS artist isn't in db"

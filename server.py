@@ -41,15 +41,25 @@ def gets_user_serach_results():
     # Converts search into titles
     artist_str = str(artist.title())
     song_str = str(song.title())
+    # Need to make sure that str are in correct format for querying
 
     artist_and_song = [artist_str, song_str]
 
     print "server.py User search artist and song list ", artist_and_song
 
     # fn in api_helper.py
-    artist_and_song = queries_song_db(artist_and_song)
-    adds_to_db = populate_database(artist_and_song)
-    artist_query = queries_artist_db(artist_and_song)
+    query_results = queries_song_db(artist_and_song)
+    
+    if query_results == "In db":
+        print "Song is in db"
+        # then direct to play video fn
+    elif query_results == "Add to db":
+        adds_to_db = populate_database(artist_and_song)
+        print "server gets_user_serach_results database populated"
+
+    # artist_query = queries_artist_db(artist_and_song)
+
+
 
 
     return render_template('playlist.html')

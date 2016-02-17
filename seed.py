@@ -1,5 +1,7 @@
 from model import db, Artist, Song, Playlist, SongPlaylist
 from pprint import pprint
+# from sqlalchemy import *
+# from sqlalchemy.orm import *
 
 import requests
 import os
@@ -11,6 +13,7 @@ def gets_json_from_en_api(artist_and_song):
     en_key = os.environ['ECHONEST_API_KEY']
     # yt_browser_key = os.environ['YOUTUBE_BROWSER_KEY']
 
+    print "seed gets json from en api ", artist_and_song
 
     en_payload = {'title': artist_and_song[1], 'artist': artist_and_song[0]}
 
@@ -47,8 +50,8 @@ def parses_en_json_results(dict_from_en_api):
 
 
 
-def adds_en_json_results_to_db(parsed_search_results):
-    ''' Seeds the database with results from parses_en_json_results'''
+def adds_en_artist_results_to_db(parsed_search_results):
+    ''' Seeds the database with artist results from parses_en_json_results'''
 
     artist_info = Artist(en_artist_id=parsed_search_results[0],
                          artist_name=parsed_search_results[1])
@@ -68,9 +71,31 @@ def adds_en_json_results_to_db(parsed_search_results):
             break       
 
 
+def adds_en_song_results_to_db(parsed_search_results):
+    ''' Seeds the database with artist results from parses_en_json_results'''
+    # This absolutely has to run AFTER adding artist to db. Required to
+    # have artist to create foreign key
+
+    print "Running adds_en_song_resuts_to_db"
+    print "parsed_search_results ", parsed_search_results
+
+    en_artist_id = parsed_search_results[0]
+    # artist_id = Artist.query(Ar.filter(Artist.en_artist_id==en_artist_id).one()
+    en_artist_id_str = str(en_artist_id)
+
+    print "$$$$$$$$$$$$$$$", type(en_artist_id_str)
+    artist_id_result = db.session.query(Artist).filter(Artist.en_artist_id == en_artist_id_str).one()
+    print "))))))))))))))"
+
+    artist_id = artist_id_result[0][0]
+
+    print "ARTIST-ID = ", artist_id
+
     song_info = Song(en_song_id=parsed_search_results[2],
                      song_title=parsed_search_results[3],
-                     artist_id=artist_info.artist_id)
+                     artist_id=artist_id[0])
+
+    print "seed, adds en song resuts to db, ", artist_id
 
     # checks for duplicate EN song IDs
     while True:
@@ -89,8 +114,6 @@ def adds_en_json_results_to_db(parsed_search_results):
 
 ##############################################
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    connect_to_db(app)
-
-    
+#     connect_to_db(app)

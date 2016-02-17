@@ -126,7 +126,7 @@ def connect_to_db(app):
     db.app = app
     db.init_app(app)
 
-    # db.create_all()
+    db.create_all()
 
 
 if __name__ == "__main__":
