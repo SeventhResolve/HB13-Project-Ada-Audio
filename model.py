@@ -27,7 +27,7 @@ class Artist(db.Model):
     artist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     artist_name = db.Column(db.String(100), nullable=False)
     en_artist_id = db.Column(db.String(100), nullable=False, unique=True)
-
+    
  
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -48,13 +48,16 @@ class Song(db.Model):
     en_song_id = db.Column(db.String(100), nullable=False, unique=True)
     
     # artist_id = foreign key from artists table
-    artist_id = db.Column(db.Integer, db.ForeignKey("artists.artist_id"))
+    artist_id = db.Column(db.Integer, 
+                          db.ForeignKey("artists.artist_id"))
 
     # genre
     # pick a couple other attributes
 
    
-    artist = db.relationship('Artist', backref=db.backref('songs', order_by=song_id))
+    artist = db.relationship('Artist', 
+                            backref=db.backref('songs', 
+                            order_by=song_id))
 
     def __repr__(self):
         """Provides helpful representation when printed."""
@@ -65,7 +68,7 @@ class Song(db.Model):
 
 
 class Playlist(db.Model):
-    """Playlist"""
+    """Playlist and attributes"""
 
     __tablename__ = "playlists"
 
@@ -93,28 +96,45 @@ class SongPlaylist(db.Model):
 
     song = db.relationship('Song',
                             # secondary='song_playlists', 
-                            backref=db.backref('song_playlists', order_by=sp_id))
+                            backref=db.backref('song_playlists', 
+                            order_by=sp_id))
 
     playlist = db.relationship('Playlist',
                             # secondary='song_playlists', 
-                            backref=db.backref('song_playlists', order_by=sp_id))
+                            backref=db.backref('song_playlists', 
+                            order_by=sp_id))
 
     def __repr__(self):
         """Provides helpful representation when printed."""
 
         return "<SongPlaylist sp_id=%s song_id%s playlist_id%s>" % (self.sp_id, self.song_id, self.playlist_id)
 
-class YouTubeVideos(db.Model):
+class YouTubeVideo(db.Model):
+    """YouTube videos and attributes"""
+    # only adds artists that are in the EN db. Will make playlisting
+    # easier later
+
+###########################
+# Is it possible for two foreign keys to point to the same field?
 
     __tablename__ = 'youtube_videos'
 
     video_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    yt_id = db.Column(db.String(100), nullable=False, unique=True)
-    artist_id = db.Column(db.Integer,
-                          db.ForeignKey('artists.artist_id'))
+    yt_video_id = db.Column(db.String(100), nullable=False, unique=True)
+    video_title = db.Column(db.String(100), nullable=False, unique=True)
+    video_key = db.Column(db.Integer, 
+                          db.ForeignKey("artists.artist_id"))
+    
 
-    artist = db.relationship('Artist',
-                              backref=db.backref('artists', order_by=video_id))
+    yt_video = db.relationship('Artist', 
+                            backref=db.backref('youtube_videos', 
+                            order_by=video_key))
+
+    def __repr__(self):
+        """Provides helpful representation when printed."""
+
+        return "<YouTubeVideo video_key=#s yt_video_id=%s video_title=%s>" % (self.video_key, self.yt_video_id, self.video_title)
+
 
 ##############################################################################
 # Helper functions

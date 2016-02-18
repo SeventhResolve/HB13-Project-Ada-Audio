@@ -8,7 +8,7 @@ from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
 from flask_sqlalchemy import SQLAlchemy
 from api_helper import *
 from seed import *
-from scratch import *
+from youtube import *
 
 import json
 
