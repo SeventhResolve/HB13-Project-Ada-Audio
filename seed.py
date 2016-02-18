@@ -1,6 +1,6 @@
 from model import db, Artist, Song, Playlist, SongPlaylist
 from pprint import pprint
-# from sqlalchemy import *
+from sqlalchemy import exists
 # from sqlalchemy.orm import *
 
 import requests
@@ -53,22 +53,17 @@ def parses_en_json_results(dict_from_en_api):
 def adds_en_artist_results_to_db(parsed_search_results):
     ''' Seeds the database with artist results from parses_en_json_results'''
 
-    artist_info = Artist(en_artist_id=parsed_search_results[0],
-                         artist_name=parsed_search_results[1])
-    # checks for duplicate EN artist IDs
-    while True:
-        try:
-            db.session.add(artist_info)
-            db.session.commit()
+    new_artist_id = parsed_search_results[0]
+    print new_artist_id
 
-            # for debugging
-            print '######## Artist Tried'
-            break
-        except:
-            
-            # for debugging
-            print "^^^^^^^^^Artist Breaked"
-            break       
+    if Artist.query.filter(Artist.en_artist_id == new_artist_id):
+        print "Artist already exists"
+    else:
+        artist_info = Artist(en_artist_id=parsed_search_results[0],
+                             artist_name=parsed_search_results[1])
+        db.session.add(artist_info)
+        db.session.flush()   
+        print "Artist info successfully flushed"    
 
 
 def adds_en_song_results_to_db(parsed_search_results):
@@ -79,38 +74,40 @@ def adds_en_song_results_to_db(parsed_search_results):
     print "Running adds_en_song_resuts_to_db"
     print "parsed_search_results ", parsed_search_results
 
+    artist = parsed_search_results[1]
     en_artist_id = parsed_search_results[0]
-    # artist_id = Artist.query(Ar.filter(Artist.en_artist_id==en_artist_id).one()
     en_artist_id_str = str(en_artist_id)
+    # convert to a string to query db
 
-    print "$$$$$$$$$$$$$$$", type(en_artist_id_str)
-    artist_id_result = db.session.query(Artist).filter(Artist.en_artist_id == en_artist_id_str).one()
-    print "))))))))))))))"
+    is_artist_in_db = db.session.query(exists().where(Artist.artist_name==artist)).scalar()
+    # checks to see if artist is already in db. Will luse db info if artist
+    # is already in db. Will use EN API info if artist doesn't exist
 
-    artist_id = artist_id_result[0][0]
+    if is_artist_in_db == True:
+        artist_id_result = db.session.query(Artist.artist_id).filter(Artist.en_artist_id == en_artist_id_str).one()
+        # takes the EN artist id and queries for the primary key for that artist
 
-    print "ARTIST-ID = ", artist_id
+        print ")))))))))))))) Returns a tuple"
 
-    song_info = Song(en_song_id=parsed_search_results[2],
-                     song_title=parsed_search_results[3],
-                     artist_id=artist_id[0])
+        artist_id = artist_id_result[0]
 
-    print "seed, adds en song resuts to db, ", artist_id
+        print "ARTIST-ID = ", artist_id
 
-    # checks for duplicate EN song IDs
-    while True:
-        try:
-            db.session.add(song_info)
-            db.session.commit()
+        song_info = Song(en_song_id=parsed_search_results[2],
+                         song_title=parsed_search_results[3],
+                         artist_id=artist_id)
 
-            # for debugging
-            print '######## Song Tried'
-            break
-        except:
-            
-            # for debugging
-            print "^^^^^^^^^ Song Breaked"
-            break
+        print "seed, adds en song resuts to db, ", artist_id
+        
+        db.session.add(song_info)
+        db.session.flush()
+        print "Song/Artist info successfully flushed"
+
+    else:
+        print "api helper adds_en_song_results_to_db !!!!!! Something went wrong adding artist to db!!!!!"
+
+    
+
 
 ##############################################
 

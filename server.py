@@ -8,6 +8,7 @@ from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
 from flask_sqlalchemy import SQLAlchemy
 from api_helper import *
 from seed import *
+from scratch import *
 
 import json
 
@@ -47,71 +48,55 @@ def gets_user_serach_results():
 
     print "server.py User search artist and song list ", artist_and_song
 
-    # fn in api_helper.py
-    query_results = queries_song_db(artist_and_song)
+
+######################################
+# put in seperate function
+
+# this part of the code checks for uniqe artist/song combos
+    # fns in api_helper.py
+    is_artist_in_db_query = queries_artist_db(artist_and_song)
+    song_query_results = queries_song_db(artist_and_song)
+
+    print "server QUERIES COMPLETED"
+
+    if is_artist_in_db_query == False:
+        adds_artist_to_db = artist_populate_database(artist_and_song)
+        print "server, artist added to db"
+        return adds_artist_to_db
+
     
-    if query_results == "In db":
+    if song_query_results == "In db":
         print "Song is in db"
         # then direct to play video fn
-    elif query_results == "Add to db":
-        adds_to_db = populate_database(artist_and_song)
+    elif song_query_results == "Add to db":
+        adds_to_db = song_populate_database(artist_and_song)
         print "server gets_user_serach_results database populated"
 
-    # artist_query = queries_artist_db(artist_and_song)
+        db.session.commit()
 
+########################################
+
+   # Now use query results to create a playlist?
 
 
 
     return render_template('playlist.html')
-    #
-
-
-
-# Need to be able to query database to see if en_song_id/en_artist_id,
-# yt_artist_id/yt_artist_id exists. If it exists, get the ids. If not
-# add to db
-
-
-
-    # # From request library, adds search to db
-    # payload = {'title': song, 'artist': artist}
-
-    # r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=%(en_key)s&format=json&results=1&" % locals(), params=payload)
     
-    # # Debugging print statement
-    # print (r.url)
 
-    # # binds dictionary from get request to variable
-    # dict_from_en_api = r.json()
+@app.route('/video-info.json')
+def get_yt_video_info():
+    """Returns YouTube info as JSON."""
 
-    # # Debugging print statement
-    # pprint(dict_from_en_api)
+    yt_results = yt_api_call()
+    yt_video_to_jsonify = parses_yt_results(yt_results)
 
-    # parsed_search_results = parses_en_json_results(dict_from_en_api)
+    return jsonify(yt_video_to_jsonify)
 
-    # added_to_db = adds_en_json_results_to_db(parsed_search_results)
-    # # THIS WORKS but I want to check for duplicates
-    # artist_info = Artist(en_artist_id=parsed_search_results[0],
-    #                      artist_name=parsed_search_results[1])
-    
-    # db.session.add(artist_info)
-    # db.session.commit()
+# def renders_yt_playlist():
 
+#     pass
 
-    # # This needs foreign keys added into the db which doesn't work...
-    # song_info = Song(en_song_id=parsed_search_results[2],
-    #                  song_title=parsed_search_results[3],
-    #                  artist_id=artist_info.artist_id)
-
-    # db.session.add(song_info)
-    # db.session.commit()
-
-
-def renders_yt_playlist():
-
-    pass
-
-    return render_template('playlist.html')
+#     return render_template('playlist.html')
 
 
 
