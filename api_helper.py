@@ -1,19 +1,44 @@
-# from apiclient.discovery import build
-# from apiclient.errors import HttpError
-# from oauth2client.tools import argparser
 from model import db, Artist, Song, Playlist, SongPlaylist
 from sqlalchemy import exists
 from sqlalchemy.orm import *
 from seed import *
 
-# import os
-# import requests
 import json
+
+
+def unique_searches_added_to_database(artist_and_song):
+    is_artist_in_db_query = queries_artist_db(artist_and_song)
+    if is_artist_in_db_query == False:
+        adds_artist_to_db = artist_populate_database(artist_and_song)
+        returns_artist_id = song_populate_database(artist_and_song)
+        print "server, artist added to db"
+        db.session.commit()
+        return returns_artist_id
+    else:
+        song_query_results = queries_song_db(artist_and_song)
+        if song_query_results == "In db":
+            print "Song is in db"
+    #         artist = artist_and_song[0]
+    #         song = artist_and_song[1]
+    #         possible_artist_names_and_ids = db.session.query((Song.artist.artist_name), (Song.artist.artist_id)).filter(Song.song_title==song).all()
+    # # QUERYING SYNTAX!!!!!!!
+    #         for names in possible_artist_names_and_ids:
+    #             if name[0] == artist:
+    #                 returns_artist_id = name[1]
+    #                 return returns_artist_id
+
+        elif song_query_results == "Add to db":
+            returns_artist_id = song_populate_database(artist_and_song)
+            print "server gets_user_serach_results database populated"
+            db.session.commit()    
+            return returns_artist_id
+        
+            
 
 def queries_song_db(artist_and_song):
     """Takes the song, queries db for duplicates and adds unique enteries"""
-    # Logic: The song/artist is assumed to be unique. Query for the song title
-    # if the song title exists, check if the song's artist is the same as the artist
+    # Logic: The song/artist is assumed to be unique. Query for the song title.
+    # If the song title exists, check if the song's artist is the same as the artist
     # the user searched for. If the artist is different, the song is not in the
     # database and must be added. If the artist is the same, the song is already
     # in the database
@@ -22,7 +47,36 @@ def queries_song_db(artist_and_song):
     artist = artist_and_song[0]
     song = artist_and_song[1]
 
-    is_song_in_db = db.session.query(exists().where(Song.song_title == song)).scalar()
+    # is_song_in_db = db.session.query(exists().where(Song.song_title == song)).scalar()
+
+    # # Debugging
+    # print "api_helper Is song in db? %s" % (is_song_in_db)
+ 
+    # if is_song_in_db == True:
+    #     # If song is in db, check if song has same artist_id as searched artist
+        
+    #     list_of_possible_artists = db.session.query(Artist.artist_id).filter(Artist.artist_name == artist).all()
+    #     # Query for a list of artist_ids that matches the searched artist
+        
+    #     print "api_helper queries_song_db Possible artist_id? ", list_of_possible_artists 
+
+    #     for item in list_of_possible_artists:
+    #         is_song_with_artist_in_db = db.session.query(exists().where((Song.artist_id == item), (Song.song_title == song)).scalar()
+
+    #         if the_song.artist.artist_name == artist:
+    #             print "Song artist combo in db :D :D :D :D"
+    #             return "In db"
+
+    #         else:
+    #             print "Song/artist combo doesn't exist add to db"
+    #         return "Add to db"
+    #     else:
+    #         print "api_helper populating db"
+    #         return "Add to db"
+
+################################
+
+    is_song_in_db = db.session.query(exists().where(Song.song_title==song)).scalar()
 
     # Debugging
     print "api_helper Is song in db? %s" % (is_song_in_db)
@@ -30,22 +84,36 @@ def queries_song_db(artist_and_song):
     if is_song_in_db == True:
         # If song is in db, check if song has same artist_id as searched artist
         
-        list_of_songs = db.session.query(Song.song_title).filter(Song.song_title == song).all()
         # Query to see if song's artist_id and the artist artist_id matches
-        # this returns a list
-        
-        print "results from is song in db query ", songs 
+        song_artist_ids = db.session.query(Song.artist_id).filter(Song.song_title==song).all()
+        artist_ids = db.session.query(Artist.artist_id).filter(Artist.artist_name==artist).all()
 
-        for each_song in list_of_songs:
-            if each_song.artist.artist_name == artist:
-                print "Song artist combo in db :D :D :D :D"
-                return "In db"
+        contains_true_or_false = []
 
-            else:
-                print "Song/artist combo doesn't exist add to db"
+        for item in song_artist_ids:
+            song_artist_id = item[0]
+            for item in artist_ids:
+                artist_id = item[0]
+                # This get all the possible artist/song combos
+                print "song_artist_id ",  song_artist_id, " artist_id ", artist_id
+
+                # Checks to see if this particular combo of song's artist_id 
+                # matches the artist's artist_id then adds the boolean to a list
+                song_artist_bool = (song_artist_id == artist_id)
+                contains_true_or_false.append(song_artist_bool)
+
+                print contains_true_or_false
+
+        # If the list contains a True value, the song exists in the db.
+        # If the list is all False then the search is a unique song/artist combo  
+        if any(contains_true_or_false) == True:
+            print "Super uber checked. Song exists in db."
+            return "In db"
+        else:
+            print "Super uber checked. Song/artist combo doesn't exist in db."
             return "Add to db"
     else:
-        print "api_helper populating db"
+        print "api_helper Song not in db. Need to populate db"
         return "Add to db"
 
 def song_populate_database(artist_and_song):
@@ -59,10 +127,10 @@ def song_populate_database(artist_and_song):
     print "api helper, populate_database Step two complete!"
     step_three = adds_en_artist_results_to_db(step_two)
     print "api helper, populate_database Step three complete!"
-    step_four = adds_en_song_results_to_db(step_two)
+    returns_artist_id = adds_en_song_results_to_db(step_two)
     print "api helper, populate_database Step four complete!"
 
-    return "api helper Song and artist info added to db"
+    return returns_artist_id
 
 def queries_artist_db(artist_and_song):
     """Takes the artist, queries db for duplicates"""
@@ -78,7 +146,8 @@ def queries_artist_db(artist_and_song):
     print "is_artist_in_db", is_artist_in_db
 
     if is_artist_in_db == False:
-        print "api helper queries_artist_db OOPS artist isn't in db"
+        print """api helper queries_artist_db OOPS artist isn't in db so
+                 song is not in db either. Add both."""
         return "False"
     else:
         print "api helper queries_artist_db HEY artist is in db"

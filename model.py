@@ -122,13 +122,13 @@ class YouTubeVideo(db.Model):
     video_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     yt_video_id = db.Column(db.String(100), nullable=False, unique=True)
     video_title = db.Column(db.String(100), nullable=False, unique=True)
-    video_key = db.Column(db.Integer, 
+    artist_id = db.Column(db.Integer, 
                           db.ForeignKey("artists.artist_id"))
     
 
     yt_video = db.relationship('Artist', 
                             backref=db.backref('youtube_videos', 
-                            order_by=video_key))
+                            order_by=video_id))
 
     def __repr__(self):
         """Provides helpful representation when printed."""

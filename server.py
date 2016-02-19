@@ -1,7 +1,7 @@
 """Ada Audio"""
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
@@ -48,57 +48,57 @@ def gets_user_serach_results():
 
     print "server.py User search artist and song list ", artist_and_song
 
-
-######################################
-# put in seperate function
-
-# this part of the code checks for uniqe artist/song combos
-    # fns in api_helper.py
-    is_artist_in_db_query = queries_artist_db(artist_and_song)
-    song_query_results = queries_song_db(artist_and_song)
-
-    print "server QUERIES COMPLETED"
-
-    if is_artist_in_db_query == False:
-        adds_artist_to_db = artist_populate_database(artist_and_song)
-        print "server, artist added to db"
-        return adds_artist_to_db
+    returns_artist_id = unique_searches_added_to_database(artist_and_song)
 
     
-    if song_query_results == "In db":
-        print "Song is in db"
-        # then direct to play video fn
-    elif song_query_results == "Add to db":
-        adds_to_db = song_populate_database(artist_and_song)
-        print "server gets_user_serach_results database populated"
 
-        db.session.commit()
+######################################
+# def unique_searches_added_to_database(artist_and_song):
+# put in seperate function, now in api_helper.py
+# def adds_checked_queries_to_db(artist_and_song):
+    # this part of the code checks for uniqe artist/song combos
+    # fns in api_helper.py
+    # is_artist_in_db_query = queries_artist_db(artist_and_song)
+    # if is_artist_in_db_query == False:
+    #     adds_artist_to_db = artist_populate_database(artist_and_song)
+    #     returns_artist_id = song_populate_database(artist_and_song)
+    #     print "server, artist added to db"
+    #     return returns_artist_id
+    # else:
+        
+
+    # song_query_results = queries_song_db(artist_and_song)
+    # if song_query_results == "In db":
+    #     print "Song is in db"
+    #     # then direct to play video fn
+    # elif song_query_results == "Add to db":
+    #     returns_artist_id = song_populate_database(artist_and_song)
+    #     print "server gets_user_serach_results database populated"
+
+    # print "server QUERIES AND ADDS COMPLETED"
+    # db.session.commit()
 
 ########################################
 
    # Now use query results to create a playlist?
 
+    # data = get_yt_video_info(artist_and_song)
 
-
-    return render_template('playlist.html')
+    # return render_template('playlist.html',
+    #                         data=data)
     
+    return render_template('playlist.html')
 
-@app.route('/video-info.json')
-def get_yt_video_info():
-    """Returns YouTube info as JSON."""
-
-    yt_results = yt_api_call()
-    yt_video_to_jsonify = parses_yt_results(yt_results)
-
-    return jsonify(yt_video_to_jsonify)
-
-# def renders_yt_playlist():
-
-#     pass
-
-#     return render_template('playlist.html')
+# @app.route('/video-info.json')
+# def get_yt_video_info():
+#     """Returns YouTube info as JSON."""
 
 
+#     yt_results = yt_api_call()
+#     yt_video_to_jsonify = parses_yt_results(yt_results)
+#     print yt_video_to_jsonify
+
+#     return jsonify(yt_video_to_jsonify)
 
 
 if __name__ == "__main__":
