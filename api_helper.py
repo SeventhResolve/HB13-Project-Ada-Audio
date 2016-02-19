@@ -6,7 +6,7 @@ from seed import *
 import json
 
 
-def unique_searches_added_to_database(artist_and_song):
+def adds_unique_searches_to_database(artist_and_song):
     is_artist_in_db_query = queries_artist_db(artist_and_song)
     if is_artist_in_db_query == False:
         adds_artist_to_db = artist_populate_database(artist_and_song)
@@ -46,6 +46,8 @@ def queries_song_db(artist_and_song):
     print "api_helper queries_song_db started"
     artist = artist_and_song[0]
     song = artist_and_song[1]
+
+#####################################
 
     # is_song_in_db = db.session.query(exists().where(Song.song_title == song)).scalar()
 

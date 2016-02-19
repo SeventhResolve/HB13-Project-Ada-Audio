@@ -122,6 +122,8 @@ class YouTubeVideo(db.Model):
     video_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     yt_video_id = db.Column(db.String(100), nullable=False, unique=True)
     video_title = db.Column(db.String(100), nullable=False, unique=True)
+    searched_artist = db.Column(db.String(50))
+    searched_song = db.Column(db.String(50))
     artist_id = db.Column(db.Integer, 
                           db.ForeignKey("artists.artist_id"))
     
@@ -133,7 +135,11 @@ class YouTubeVideo(db.Model):
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<YouTubeVideo video_key=#s yt_video_id=%s video_title=%s>" % (self.video_key, self.yt_video_id, self.video_title)
+        return """<YouTubeVideo video_id=#s yt_video_id=%s
+                    searched_artist=%s searched_song=%s>""" % (self.video_id, 
+                                                               self.yt_video_id, 
+                                                               self.searched_artist,
+                                                               self.searched_song)
 
 
 ##############################################################################

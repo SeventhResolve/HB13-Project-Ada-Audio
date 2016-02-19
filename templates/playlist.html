@@ -13,7 +13,9 @@
 // function get ytResults() {
 //   $.get('/video-info.json', changeVideoId ())
 // }
-
+  // var data = {{ data|tojson|safe }};
+  // var data = JSON.parse(data);
+  // var ytVideoId = data['videoId'];
 
 
   // 2. This code loads the IFrame Player API code asynchronously.
@@ -27,14 +29,17 @@
   var player;
   // variable name of the embedded video player
   function onYouTubeIframeAPIReady() {
-    // trying to use jinja to get my dictionary from server.py
-    // var ytVideoId = {{ some variable|tojson|safe }};
+    var js_data = {{ data|tojson|safe }};
+    js_data = JSON.parse(js_data);
+    console.log(js_data);
+    var ytVideoId = js_data['video_id'];
+    console.log(ytVideoId)
     player = new YT.Player('player', {
       height: '390',
       width: '640',
       // need to change video Id to a var 
-      videoId: 'M7lc1UVf-VE',
-      // !!!!!!!! videoId: '60ItHLz5WEA',
+      videoId: ytVideoId,
+      // videoId: '60ItHLz5WEA',
       events: {
         'onReady': onPlayerReady,
         // tells the vido player to play as soon as it's ready

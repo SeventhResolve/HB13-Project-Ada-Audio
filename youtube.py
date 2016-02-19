@@ -1,17 +1,24 @@
-from model import db, Artist, Song, Playlist, SongPlaylist
+from model import db, Artist, Song, Playlist, SongPlaylist, YouTubeVideo
 from pprint import pprint
+from sqlalchemy import exists
 # from server import *
 
 import requests
 import os
 
 
+def queries_video_db(artist_and_song):
+    """Queries the YoutubeVideo table to see if searched song exists as a video"""
+
+    searched_artist = artist_and_song[0]
+    searched_song = artist_and_song[1]
+
+################ Querying syntax
+    # db.session.query(YouTubeVideo).
 
 
 def yt_api_call(artist_and_song):
     """Gets JSON from youtube api"""
-
-    artist_and_song = ['Taylor Swift', 'Blank Space']
 
     yt_key = os.environ['YOUTUBE_SERVER_KEY']
 
@@ -54,20 +61,36 @@ def parses_yt_results(dict_from_yt_api):
     # returns a python dictionary for flexibility. Can be jsonified, jinjaed,
     # or used as is
 
-def adds_yt_video_info_to_db(parsed_search_results, artist_id):
+def adds_yt_video_info_to_db(parsed_search_results, artist_and_song, artist_id):
     """Adds video to youtube_videos table"""
 
-    print "yt adds_yt_song_results_to_db entered"
+    print "yt adds_yt_video_info_to_db"
+    print "yt adds_yt_video_info_to_db artist_id ", artist_id
 
-    yt_search_results = parses_yt_results(parsed_search_results)
+    searched_artist = artist_and_song[0]
+    searched_song = artist_and_song[1]
 
-    video_info = YouTubeVideo(yt_video_id=yt_search_results['video_id'],
-                              video_title=yt_search_results['video_title'],
-                              artist_id=artist_id)
+    yt_video_id = parsed_search_results['video_id']
+    video_title = parsed_search_results['video_title']
 
-    db.session.add(video_info)
-    db.session.flush()
-    print "youtube, adds_yt_song_results_to_db, Video and artist_id successfully flushed to database."
+    print "Youtube.py yt_video_id ", yt_video_id
+    print "Youtube.py video_title ", video_title
+
+    does_video_exist = db.session.query(exists().where(YouTubeVideo.yt_video_id == yt_video_id)).scalar()
+
+    if does_video_exist:
+        print "Video in db"
+    else:
+        print "Video doesn't exist. Ading to db"
+        video_info = YouTubeVideo(yt_video_id=yt_video_id,
+                                  video_title=video_title,
+                                  searched_artist=searched_artist,
+                                  searched_song=searched_song,
+                                  artist_id=artist_id)
+
+        db.session.add(video_info)
+        db.session.flush()
+        print "youtube, adds_yt_song_results_to_db, Video and artist_id successfully flushed to database."
 
 
 

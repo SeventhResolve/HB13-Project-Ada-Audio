@@ -96,6 +96,11 @@ def adds_en_song_results_to_db(parsed_search_results):
 
     if is_song_en_id_in_db == True:
         print "seed, adds_en_song_resuts_to_db, Song's EN ID in DB"
+        artist_id_result = db.session.query(Artist.artist_id).filter(Artist.en_artist_id == en_artist_id_str).one()
+        # takes the EN artist id and queries for the primary key for that artist
+
+        artist_id = artist_id_result[0]
+
         return artist_id
     else:
         if is_artist_en_id_in_db == True:

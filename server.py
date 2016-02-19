@@ -4,7 +4,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist
+from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist, YouTubeVideo
 from flask_sqlalchemy import SQLAlchemy
 from api_helper import *
 from seed import *
@@ -55,11 +55,16 @@ def gets_user_serach_results():
     # from yourube.py file
     dict_from_yt_api = yt_api_call(artist_and_song)
     parsed_search_results = parses_yt_results(dict_from_yt_api)
-    adds_to_db = adds_yt_video_info_to_db(parsed_search_results, 
+    print "Server, parsed search_results ", parsed_search_results
+    # need to check if search already exists
+    adds_to_db = adds_yt_video_info_to_db(parsed_search_results,
+                                          artist_and_song, 
                                           returns_artist_id)
+    db.session.commit()
 
     # yt videoId in a dict to be passed to js playlist page
-    data = parsed_search_results
+    data = json.dumps(parsed_search_results)
+
 
 ######################################
 
