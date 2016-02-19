@@ -48,11 +48,21 @@ def gets_user_serach_results():
 
     print "server.py User search artist and song list ", artist_and_song
 
+    # checks user search for uniqueness and adds to db. 
+    # in api_helper.py
     returns_artist_id = unique_searches_added_to_database(artist_and_song)
 
-    
+    # from yourube.py file
+    dict_from_yt_api = yt_api_call(artist_and_song)
+    parsed_search_results = parses_yt_results(dict_from_yt_api)
+    adds_to_db = adds_yt_video_info_to_db(parsed_search_results, 
+                                          returns_artist_id)
+
+    # yt videoId in a dict to be passed to js playlist page
+    data = parsed_search_results
 
 ######################################
+
 # def unique_searches_added_to_database(artist_and_song):
 # put in seperate function, now in api_helper.py
 # def adds_checked_queries_to_db(artist_and_song):
@@ -80,14 +90,11 @@ def gets_user_serach_results():
 
 ########################################
 
-   # Now use query results to create a playlist?
 
-    # data = get_yt_video_info(artist_and_song)
-
-    # return render_template('playlist.html',
-    #                         data=data)
+    return render_template('playlist.html',
+                            data=data)
     
-    return render_template('playlist.html')
+    # return render_template('playlist.html')
 
 # @app.route('/video-info.json')
 # def get_yt_video_info():

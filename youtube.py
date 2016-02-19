@@ -8,7 +8,7 @@ import os
 
 
 
-def yt_api_call():
+def yt_api_call(artist_and_song):
     """Gets JSON from youtube api"""
 
     artist_and_song = ['Taylor Swift', 'Blank Space']
@@ -54,7 +54,7 @@ def parses_yt_results(dict_from_yt_api):
     # returns a python dictionary for flexibility. Can be jsonified, jinjaed,
     # or used as is
 
-def adds_yt_song_results_to_db(parsed_search_results, artist_id):
+def adds_yt_video_info_to_db(parsed_search_results, artist_id):
     """Adds video to youtube_videos table"""
 
     print "yt adds_yt_song_results_to_db entered"
@@ -64,3 +64,12 @@ def adds_yt_song_results_to_db(parsed_search_results, artist_id):
     video_info = YouTubeVideo(yt_video_id=yt_search_results['video_id'],
                               video_title=yt_search_results['video_title'],
                               artist_id=artist_id)
+
+    db.session.add(video_info)
+    db.session.flush()
+    print "youtube, adds_yt_song_results_to_db, Video and artist_id successfully flushed to database."
+
+
+
+
+
