@@ -7,16 +7,6 @@ import requests
 import os
 
 
-def queries_video_db(artist_and_song):
-    """Queries the YoutubeVideo table to see if searched song exists as a video"""
-
-    searched_artist = artist_and_song[0]
-    searched_song = artist_and_song[1]
-
-################ Querying syntax
-    # db.session.query(YouTubeVideo).
-
-
 def yt_api_call(artist_and_song):
     """Gets JSON from youtube api"""
 
@@ -75,6 +65,8 @@ def adds_yt_video_info_to_db(parsed_search_results, artist_and_song, artist_id):
 
     print "Youtube.py yt_video_id ", yt_video_id
     print "Youtube.py video_title ", video_title
+
+
 
     does_video_exist = db.session.query(exists().where(YouTubeVideo.yt_video_id == yt_video_id)).scalar()
 

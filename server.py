@@ -50,68 +50,29 @@ def gets_user_serach_results():
 
     # checks user search for uniqueness and adds to db. 
     # in api_helper.py
-    returns_artist_id = unique_searches_added_to_database(artist_and_song)
+    returns_artist_id = adds_unique_searches_to_database(artist_and_song)
 
     # from yourube.py file
     dict_from_yt_api = yt_api_call(artist_and_song)
     parsed_search_results = parses_yt_results(dict_from_yt_api)
+    
     print "Server, parsed search_results ", parsed_search_results
+    
     # need to check if search already exists
     adds_to_db = adds_yt_video_info_to_db(parsed_search_results,
                                           artist_and_song, 
                                           returns_artist_id)
+    
     db.session.commit()
 
     # yt videoId in a dict to be passed to js playlist page
     data = json.dumps(parsed_search_results)
 
-
-######################################
-
-# def unique_searches_added_to_database(artist_and_song):
-# put in seperate function, now in api_helper.py
-# def adds_checked_queries_to_db(artist_and_song):
-    # this part of the code checks for uniqe artist/song combos
-    # fns in api_helper.py
-    # is_artist_in_db_query = queries_artist_db(artist_and_song)
-    # if is_artist_in_db_query == False:
-    #     adds_artist_to_db = artist_populate_database(artist_and_song)
-    #     returns_artist_id = song_populate_database(artist_and_song)
-    #     print "server, artist added to db"
-    #     return returns_artist_id
-    # else:
-        
-
-    # song_query_results = queries_song_db(artist_and_song)
-    # if song_query_results == "In db":
-    #     print "Song is in db"
-    #     # then direct to play video fn
-    # elif song_query_results == "Add to db":
-    #     returns_artist_id = song_populate_database(artist_and_song)
-    #     print "server gets_user_serach_results database populated"
-
-    # print "server QUERIES AND ADDS COMPLETED"
-    # db.session.commit()
-
-########################################
-
-
     return render_template('playlist.html',
                             data=data)
     
-    # return render_template('playlist.html')
 
-# @app.route('/video-info.json')
-# def get_yt_video_info():
-#     """Returns YouTube info as JSON."""
-
-
-#     yt_results = yt_api_call()
-#     yt_video_to_jsonify = parses_yt_results(yt_results)
-#     print yt_video_to_jsonify
-
-#     return jsonify(yt_video_to_jsonify)
-
+######################################
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

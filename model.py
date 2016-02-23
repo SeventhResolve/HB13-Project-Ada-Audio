@@ -73,6 +73,7 @@ class Playlist(db.Model):
     __tablename__ = "playlists"
 
     playlist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    # might need a playlist Id from EchoNest...
     playlist_name = db.Column(db.String(100), nullable=False)
 
 

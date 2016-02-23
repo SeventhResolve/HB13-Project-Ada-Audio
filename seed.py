@@ -10,7 +10,7 @@ import os
 def gets_json_from_en_api(artist_and_song):
     """If songs aren't in db, get the api jsons"""
 
-    en_key = os.environ['ECHONEST_API_KEY']
+    en_key = os.environ['ECHO_NEST_API_KEY']
     # yt_browser_key = os.environ['YOUTUBE_BROWSER_KEY']
 
     print "seed gets json from en api ", artist_and_song
