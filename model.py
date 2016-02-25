@@ -73,15 +73,14 @@ class Playlist(db.Model):
     __tablename__ = "playlists"
 
     playlist_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    # might need a playlist Id from EchoNest...
-    playlist_name = db.Column(db.String(100), nullable=False)
-
+    en_session_id = db.Column(db.String(100), nullable=False, unique=True)
+    # session id from echonest
 
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<Playlist playlist_id=%s playlist_name=%s>" % (self.playlist_id,
-                                                               self.playlist_name)
+        return "<Playlist playlist_id=%s en_session_id=%s>" % (self.playlist_id,
+                                                               self.en_session_id)
 
 
 class SongPlaylist(db.Model):

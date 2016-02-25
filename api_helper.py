@@ -2,8 +2,11 @@ from model import db, Artist, Song, Playlist, SongPlaylist
 from sqlalchemy import exists
 from sqlalchemy.orm import *
 from seed import *
+from pyechonest import *
 
 import json
+import requests
+import os
 
 
 def adds_unique_searches_to_database(artist_and_song):
@@ -17,7 +20,6 @@ def adds_unique_searches_to_database(artist_and_song):
         adds_artist_to_db = artist_populate_database(artist_and_song)
         returns_artist_id = song_populate_database(artist_and_song)
         print "server, artist added to db"
-        db.session.commit()
         return returns_artist_id
     else:
         song_query_results = queries_song_db(artist_and_song)
@@ -146,6 +148,54 @@ def song_populate_database(artist_and_song):
     return returns_artist_id
 
 
+def creates_en_playlist(en_session_id_and_en_song_id):
+    """Generates an EchoNest playlist to query YouTube"""
+    # get parameter from seed.py
+
+    en_playlist = playlist.Playlist(session_id=en_session_id_and_en_song_id[0],
+                                 song_id=en_session_id_and_en_song_id[1])
+    print "Echonest playlist ", en_playlist
+
+    return en_playlist
 
 
+def gets_playlist_history(en_playlist):
 
+    current_song = en_playlist.get_current_songs()
+    print "Current song ", current_song
+
+    next_song = en_playlist.get_next_songs(results=5)
+    print "Next songs ", next_song
+    # this returns a list of songs names (doesn't seem all that useful)
+
+    playlist_info_content = en_playlist.info()
+    print "Playlist info ", pprint(playlist_info_content)
+    # prints a dictionary with the playlist history
+
+    playlist_history = playlist_info_content['history']
+    # list of songs with song info as a dictionary
+
+    yt_playlist_query = []
+    for each_song in playlist_history:
+        artist_name = each_song['artist_name']
+        song_title = each_song['title']
+
+        yt_song_query = [artist_name, song_title]
+        yt_playlist_query.append(yt_song_query)
+
+    print yt_playlist_query
+    # list of current song and the next 5 songs that will play
+    return yt_playlist_query
+
+def creates_yt_playlist_query(artist_and_song):
+    """ Asdf """
+    # parsed_search_results from seed.py, parses_en_json_results(dict_from_en_api)
+
+    step_one = gets_json_from_en_api(artist_and_song)
+    step_two = parses_en_json_results(step_one)
+    en_session_id_and_en_song_id = generates_en_playlist_session_id(step_two)
+    adds_en_session_id_to_db(en_session_id_and_en_song_id)
+    en_playlist = creates_en_playlist(en_session_id_and_en_song_id)
+    yt_playlist_query = gets_playlist_history(en_playlist)
+
+    return yt_playlist_query

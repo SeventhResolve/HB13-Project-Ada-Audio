@@ -1,7 +1,6 @@
 from model import db, Artist, Song, Playlist, SongPlaylist
 from pprint import pprint
 from sqlalchemy import exists
-# from sqlalchemy.orm import *
 
 import requests
 import os
@@ -11,7 +10,6 @@ def gets_json_from_en_api(artist_and_song):
     """If songs aren't in db, get the api jsons"""
 
     en_key = os.environ['ECHO_NEST_API_KEY']
-    # yt_browser_key = os.environ['YOUTUBE_BROWSER_KEY']
 
     print "seed gets json from en api ", artist_and_song
 
@@ -140,7 +138,53 @@ def adds_en_song_results_to_db(parsed_search_results):
             print "seed, adds_en_song_resuts_to_db, Artist and Song added"
             return artist_id
 
+
+def generates_en_playlist_session_id(parsed_search_results):
+    """Uses the song's primary_id to seed an EchoNest playlist session and adds to db"""
+    # parsed_search_results from seed.py, parses_en_json_results(dictfrom_en_api)
+
+    en_song_id = parsed_search_results[2]
+
+    print "api_helper, generates_en_playlist, en_song_id ", en_song_id
+
+    en_key = os.environ['ECHO_NEST_API_KEY']
+
+    en_payload = {'song_id': en_song_id, 'type': 'song-radio'}
+
+    r = requests.get("http://developer.echonest.com/api/v4/playlist/dynamic/create?api_key=%(en_key)s&" % locals(), params=en_payload)
     
+    # Debugging print statement
+    # print (r.url)
+
+    # binds dictionary from get request to variable
+    en_playlist_info = r.json()
+
+    # Debugging print statement
+    pprint(en_playlist_info)
+
+    en_session_id = en_playlist_info['response']['session_id']
+    print "api_helper, generates_en_playlist_session_id, en_session_id ", en_session_id
+
+    en_session_id_and_en_song_id = [en_session_id, en_song_id]
+
+    return en_session_id_and_en_song_id
+
+
+def adds_en_session_id_to_db(en_session_id_and_en_song_id):
+
+    en_session_id = en_session_id_and_en_song_id[0]
+
+    is_en_session_id_in_db = db.session.query(exists().where(Playlist.en_session_id==en_session_id)).scalar()
+
+    if is_en_session_id_in_db == True:
+        print "Session_id in db"
+    else:
+        add_en_session_id = Playlist(en_session_id=en_session_id)
+        db.session.add(add_en_session_id)
+        db.session.flush()
+
+        print "en_session_id added to Playlist db"
+
 
 
 ##############################################

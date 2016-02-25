@@ -62,6 +62,9 @@ def gets_user_serach_results():
     adds_to_db = adds_yt_video_info_to_db(parsed_search_results,
                                           artist_and_song, 
                                           returns_artist_id)
+
+
+    yt_playlist_query = creates_yt_playlist_query(artist_and_song)
     
     db.session.commit()
 
