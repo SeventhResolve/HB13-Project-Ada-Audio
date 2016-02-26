@@ -186,6 +186,36 @@ def adds_en_session_id_to_db(en_session_id_and_en_song_id):
         print "en_session_id added to Playlist db"
 
 
+def adds_new_artists_to_db_by_en_id(yt_playlist_query):
+    """Using the EchoNest Artist ID, adds new artists to db"""
+    # yt_playlist_query returned by gets_playlist_history(en_playlist), api_helper.py
+
+    for item in yt_playlist_query:
+        en_artist_id = item['en_artist_id']
+        is_en_artist_id_in_db = db.session.query(exists().where(Artist.en_artist_id==en_artist_id)).scalar()
+        if is_en_artist_id_in_db == False:
+            artist_info = Artist(en_artist_id=en_artist_id,
+                                 artist_name=item['artist_name'])
+            db.session.add(artist_info)
+            db.session.flush
+
+
+def adds_new_songs_to_db_by_en_it(yt_playlist_query):
+    """Using the Echonest Song ID, adds new songs to db"""
+    # yt_playlist_query returned by gets_playlist_history(en_playlist), api_helper.py
+
+    for item in yt_playlist_query:
+        en_song_id = item['en_song_id']
+        is_en_song_id_in_db = db.session.query(exists().where(Song.en_song_id == en_song_id)).scalar()
+        if is_en_song_id_in_db == False:
+            en_artist_id = item['en_artist_id']
+            artist_id = db.session.query(Artist.artist_id).filter(Artist.en_artist_id == en_artist_id).one()
+            song_info = Song(en_song_id=en_song_id,
+                         song_title=item['song_title'],
+                         artist_id=artist_id)
+            db.session.add(song_info)
+            db.session.flush
+
 
 ##############################################
 

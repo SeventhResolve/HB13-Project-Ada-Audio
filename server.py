@@ -2,10 +2,10 @@
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
-
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Artist, Song, Playlist, SongPlaylist, YouTubeVideo
 from flask_sqlalchemy import SQLAlchemy
+from playlist_helper import *
 from api_helper import *
 from seed import *
 from youtube import *
@@ -65,11 +65,25 @@ def gets_user_serach_results():
 
 
     yt_playlist_query = creates_yt_playlist_query(artist_and_song)
-    
+    # from api_helper.py
+    print "1111111111111111"
+    new_artists_added = adds_new_artists_to_db_by_en_id(yt_playlist_query)
+    print "2222222222222222"
+    new_songs_added = adds_new_songs_to_db_by_en_it(yt_playlist_query)
+    print "333333333333333"
+    # contains_video_ids = adds_youtube_playlist_videos_to_db(yt_playlist_query)
+    # print "444444444444444"
+
+    yt_playlist_id = create_yt_playlist_id()
+    print "#################### ", yt_playlist_id
+
     db.session.commit()
+
 
     # yt videoId in a dict to be passed to js playlist page
     data = json.dumps(parsed_search_results)
+
+    
 
     return render_template('playlist.html',
                             data=data)
@@ -83,7 +97,6 @@ if __name__ == "__main__":
     app.debug = True
 
     connect_to_db(app)
-    '''Do I need to connect to db?'''
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)

@@ -3,10 +3,12 @@ from sqlalchemy import exists
 from sqlalchemy.orm import *
 from seed import *
 from pyechonest import *
+from youtube import *
 
 import json
 import requests
 import os
+
 
 
 def adds_unique_searches_to_database(artist_and_song):
@@ -178,14 +180,21 @@ def gets_playlist_history(en_playlist):
     yt_playlist_query = []
     for each_song in playlist_history:
         artist_name = each_song['artist_name']
+        en_artist_id = each_song['artist_id']
         song_title = each_song['title']
+        en_song_id = each_song['id']
 
-        yt_song_query = [artist_name, song_title]
+        yt_song_query = {'artist_name': artist_name, 
+                         'en_artist_id': en_artist_id, 
+                         'song_title': song_title,
+                         'en_song_id': en_song_id}
+
         yt_playlist_query.append(yt_song_query)
 
     print yt_playlist_query
     # list of current song and the next 5 songs that will play
     return yt_playlist_query
+
 
 def creates_yt_playlist_query(artist_and_song):
     """ Asdf """
@@ -197,5 +206,141 @@ def creates_yt_playlist_query(artist_and_song):
     adds_en_session_id_to_db(en_session_id_and_en_song_id)
     en_playlist = creates_en_playlist(en_session_id_and_en_song_id)
     yt_playlist_query = gets_playlist_history(en_playlist)
+    # list of current song and the next 5 songs that will play
+    # in [[artist_name, title], []] format
 
     return yt_playlist_query
+
+def adds_youtube_playlist_videos_to_db(yt_playlist_query):
+    """Takes the list of songs and finds the coresponding music video"""
+
+    for item in yt_playlist_query:
+
+        artist_name = item['artist_name']
+        song_title = item['song_title']
+        artist_and_song = [artist_name, song_title]
+
+        dict_from_yt_api = yt_api_call(artist_and_song)
+        parsed_search_results = parses_yt_results(dict_from_yt_api)
+
+        contains_artist_name_and_artist_id = []
+        en_song_id = item['en_song_id']
+        print("en_song_id ", en_song_id)
+        artist_name_and_artist_id = db.session.query(Artist.artist_name, Artist.artist_id).filter(Song.en_song_id == en_song_id).one()
+        contains_artist_name_and_artist_id.append(artist_name_and_artist_id)
+
+        contains_video_ids = []
+        for each_artist_name_and_artist_id in contains_artist_name_and_artist_id:
+            artist_name = each_artist_name_and_artist_id[0]
+            if artist_name == each_artist_and_song[0]:
+                artist_id = each_artist_name_and_artist_id[1]
+                video_id = parsed_search_results[video_id]
+                contains_video_ids.append(video_id)
+                adds_yt_video_info_to_db(parsed_search_results, each_artist_and_song, artist_id)
+
+    print "api_helper, adds_youtube_playlist_videos_to_db, contains_video_ids ", contains_video_ids
+    return contains_video_ids
+
+
+def makes_playlist_of_yt_video_ids(contains_video_ids):
+    """Queries Youtube Video db and creates a playlist with video ids"""
+    # Parameter in list form
+
+    return contains_video_ids
+
+
+def create_yt_playlist_id():
+    
+    import httplib2
+    import os
+    import sys
+    import json
+
+    from apiclient.discovery import build
+    from apiclient.errors import HttpError
+    from oauth2client.client import flow_from_clientsecrets
+    from oauth2client.file import Storage
+    from oauth2client.tools import argparser, run_flow
+
+    # *** Following code provided by the YouTube API***
+    # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
+    # the OAuth 2.0 information for this application, including its client_id and
+    # client_secret. You can acquire an OAuth 2.0 client ID and client secret from
+    # the Google Developers Console at
+    # https://console.developers.google.com/.
+    # Please ensure that you have enabled the YouTube Data API for your project.
+    # For more information about using OAuth2 to access the YouTube Data API, see:
+    #   https://developers.google.com/youtube/v3/guides/authentication
+    # For more information about the client_secrets.json file format, see:
+    #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
+    CLIENT_SECRETS_FILE = "/Users/Kitty/HB13/ada_audio/client_secrets.json"
+
+
+    # This variable defines a message to display if the CLIENT_SECRETS_FILE is
+    # missing.
+    MISSING_CLIENT_SECRETS_MESSAGE = """
+    WARNING: Please configure OAuth 2.0
+
+    To make this sample run you will need to populate the client_secrets.json file
+    found at:
+
+     %s
+
+    with information from the Developers Console
+    https://console.developers.google.com/
+
+    For more information about the client_secrets.json file format, please visit:
+    https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
+    """ % os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                     CLIENT_SECRETS_FILE))
+
+    # This OAuth 2.0 access scope allows for full read/write access to the
+    # authenticated user's account.
+    YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
+    YOUTUBE_API_SERVICE_NAME = "youtube"
+    YOUTUBE_API_VERSION = "v3"
+
+    flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
+        message=MISSING_CLIENT_SECRETS_MESSAGE,
+        scope=YOUTUBE_READ_WRITE_SCOPE)
+
+    storage = Storage("%s-oauth2.json" % sys.argv[0])
+    credentials = storage.get()
+
+    if credentials is None or credentials.invalid:
+        flags = argparser.parse_args()
+        credentials = run_flow(flow, storage, flags)
+
+    youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+        http=credentials.authorize(httplib2.Http()))
+
+    # This code creates a new, private playlist in the authorized user's channel.
+    playlists_insert_response = youtube.playlists().insert(
+        part="snippet,status",
+        body=dict(
+            snippet=dict(
+                title="Test Playlist",
+                description="A private playlist created with the YouTube API v3"
+            ),
+            status=dict(
+                privacyStatus="private"
+            )
+        )
+    ).execute()
+
+    print "New playlist id: %s" % playlists_insert_response["id"]
+    playlist_id = playlists_insert_response['id']
+    return playlist_id
+
+
+
+
+
+
+
+
+
+
+
+
+
