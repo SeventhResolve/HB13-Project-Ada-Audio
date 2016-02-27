@@ -4,9 +4,10 @@
 
 {% block content %}
 
+
 <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
 <div id="player"></div>
-<!-- need to put jquery code here -->
+
 <script>
   "use strict";
 
@@ -24,7 +25,7 @@
     var js_data = {{ data|tojson|safe }};
     js_data = JSON.parse(js_data);
     console.log(js_data);
-    var ytVideoId = js_data['video_id'];
+    var ytVideoId = js_data[0]['yt_video_id'];
     console.log(ytVideoId)
     player = new YT.Player('player', {
       height: '390',

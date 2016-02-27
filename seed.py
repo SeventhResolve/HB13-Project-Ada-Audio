@@ -1,4 +1,4 @@
-from model import db, Artist, Song, Playlist, SongPlaylist
+from model import db, Artist, Song, Playlist, SongPlaylist, YouTubeVideo
 from pprint import pprint
 from sqlalchemy import exists
 
@@ -200,7 +200,7 @@ def adds_new_artists_to_db_by_en_id(yt_playlist_query):
             db.session.flush
 
 
-def adds_new_songs_to_db_by_en_it(yt_playlist_query):
+def adds_new_songs_to_db_by_en_id(yt_playlist_query):
     """Using the Echonest Song ID, adds new songs to db"""
     # yt_playlist_query returned by gets_playlist_history(en_playlist), api_helper.py
 
@@ -215,6 +215,41 @@ def adds_new_songs_to_db_by_en_it(yt_playlist_query):
                          artist_id=artist_id)
             db.session.add(song_info)
             db.session.flush
+
+
+def adds_yt_video_info_to_db(contains_yt_playlist_info):
+    """Adds unique videos to youtube_videos table"""
+    
+    # parameter from creates_yt_video_playlist(yt_playlist_query):
+    # in youtube.py
+
+    print 'SEED.PY, adds_yt_video_info_to_db, contains_yt_playlist_info ', contains_yt_playlist_info
+
+    for video_item in contains_yt_playlist_info:
+        yt_video_id = video_item['yt_video_id']
+        video_title = video_item['video_title']
+        video_thumbnail = video_item['video_thumbnail']
+        searched_artist = video_item['searched_artist']
+        searched_song = video_item['searched_song']
+        artist_id = video_item['artist_id']
+
+        does_video_exist = db.session.query(exists().where(YouTubeVideo.yt_video_id == yt_video_id)).scalar()
+
+        if does_video_exist:
+            print "Video in db"
+        else:
+            print "Video doesn't exist. Ading to db"
+            video_info = YouTubeVideo(yt_video_id=yt_video_id,
+                                      video_title=video_title,
+                                      video_thumbnail=video_thumbnail,
+                                      searched_artist=searched_artist,
+                                      searched_song=searched_song,
+                                      artist_id=artist_id)
+
+            db.session.add(video_info)
+            db.session.flush()
+        print "youtube, adds_yt_song_results_to_db, Video and artist_id successfully flushed to database."
+
 
 
 ##############################################

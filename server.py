@@ -52,36 +52,35 @@ def gets_user_serach_results():
     # in api_helper.py
     returns_artist_id = adds_unique_searches_to_database(artist_and_song)
 
-    # from yourube.py file
-    dict_from_yt_api = yt_api_call(artist_and_song)
-    parsed_search_results = parses_yt_results(dict_from_yt_api)
-    
-    print "Server, parsed search_results ", parsed_search_results
-    
-    # need to check if search already exists
-    adds_to_db = adds_yt_video_info_to_db(parsed_search_results,
-                                          artist_and_song, 
-                                          returns_artist_id)
-
 
     yt_playlist_query = creates_yt_playlist_query(artist_and_song)
-    # from api_helper.py
+    # from api_helper.py, made by echonest
     print "1111111111111111"
     new_artists_added = adds_new_artists_to_db_by_en_id(yt_playlist_query)
+    # from seed.py
     print "2222222222222222"
-    new_songs_added = adds_new_songs_to_db_by_en_it(yt_playlist_query)
+    new_songs_added = adds_new_songs_to_db_by_en_id(yt_playlist_query)
+    # from seed.py
     print "333333333333333"
-    # contains_video_ids = adds_youtube_playlist_videos_to_db(yt_playlist_query)
-    # print "444444444444444"
+    yt_playlist = creates_yt_video_playlist(yt_playlist_query)
+    # from youtube.py
+    print "444444444444444"
+    added_yt_playlist_info = adds_yt_video_info_to_db(yt_playlist)
+    # from seed.py
+    print "55555555555555"
+    dict_of_playlist_videos = makes_playlist_of_yt_video_ids(yt_playlist)
+    print "66666666666666", yt_playlist
 
     yt_playlist_id = create_yt_playlist_id()
+    # creates an empty playlist on youtube account
     print "#################### ", yt_playlist_id
 
     db.session.commit()
 
 
+
     # yt videoId in a dict to be passed to js playlist page
-    data = json.dumps(parsed_search_results)
+    data = json.dumps(yt_playlist)
 
     
 

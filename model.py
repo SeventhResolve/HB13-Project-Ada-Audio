@@ -111,17 +111,13 @@ class SongPlaylist(db.Model):
 
 class YouTubeVideo(db.Model):
     """YouTube videos and attributes"""
-    # only adds artists that are in the EN db. Will make playlisting
-    # easier later
-
-###########################
-# Is it possible for two foreign keys to point to the same field?
 
     __tablename__ = 'youtube_videos'
 
     video_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     yt_video_id = db.Column(db.String(100), nullable=False, unique=True)
     video_title = db.Column(db.String(100), nullable=False, unique=True)
+    video_thumbnail = db.Column(db.String(100), nullable=False, unique=True)
     searched_artist = db.Column(db.String(50))
     searched_song = db.Column(db.String(50))
     artist_id = db.Column(db.Integer, 
