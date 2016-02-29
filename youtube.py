@@ -36,6 +36,7 @@ def yt_api_call(artist_and_song):
 
     return dict_from_yt_api
 
+
 def parses_yt_results(dict_from_yt_api):
     """Parses youtube dictionary results for videoId and video title"""
 
@@ -58,77 +59,62 @@ def parses_yt_results(dict_from_yt_api):
     # or used as is
 
 
+def creates_yt_frontend_playlist(yt_playlist_query):
+    """Takes en playlist and calls yt api for music videos, adds returned JSON
+    into a playlist. For use on front-end"""
 
-def creates_yt_video_playlist(yt_playlist_query):
-    """Takes en playlist and calls yt api for music videos, returns 
-    playlist of video ids to pass as JSON"""
-
-    # song_object = Song.query.filter(Song.en_song_id == en_song_id).one()
-    # artist_id = song_object.artist_id
-    # en_artist_id = db.session.query(Artist.en_artist_id).filter(Artist.artist_id == artist_id).one()            
-    # artist_name = db.session.query(Artist.artist_name).filter(Artist.artist_id == artist_id).one()            
-    # song_title = db.session.query(Song.song_title).filter(Song.en_song_id == en_song_id).one()
-
-
-                        # {'artist_name': artist_name,
-                        #  'en_artist_id': en_artist_id,
-                        #  'song_title': song_title,
-                        #  'en_song_id': en_song_id}
-
-    contains_yt_playlist_info = []
+    yt_playlist = []
 
     for item in yt_playlist_query:
 
         artist_name = item['artist_name']
         song_title = item['song_title']
-        en_song_id = item['en_song_id']
-        en_artist_id = item['en_artist_id']
         artist_and_song = [artist_name, song_title]
+
+        dict_from_yt_api = yt_api_call(artist_and_song)
+        yt_playlist.append(dict_from_yt_api)
+
+    yt_frontend_playlist = {'playlist': yt_playlist}
+
+
+    print "*** youtube.py, creates_yt_frontend_playlist, ", yt_frontend_playlist
+    return yt_frontend_playlist
+
+
+def creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query):
+    """Takes JSON playlist and echonest song info and reformats 
+    it for addition into db"""
+
+    contains_yt_playlist_info = []
+    count = 0
+
+    for item in yt_playlist_query:
+
+        artist_name = item['artist_name']
+        song_title = item['song_title']
+        en_artist_id = item['en_artist_id']
 
         artist_id = db.session.query(Artist.artist_id).filter(Artist.en_artist_id == en_artist_id).one()
 
-        dict_from_yt_api = yt_api_call(artist_and_song)
-        parsed_search_results = parses_yt_results(dict_from_yt_api)
-        # returns dictionary of youtube videos
+        print "$$$$$$$$$$$$$$$$$$ count", count
 
-        video_id = parsed_search_results['video_id']
-        video_title = parsed_search_results['video_title']
-        video_thumbnail = parsed_search_results['video_thumbnail']
+        yt_video_id = yt_frontend_playlist['playlist'][count]['items'][0]['id']['videoId']
+        video_title = yt_frontend_playlist['playlist'][count]['items'][0]['snippet']['title']
+        video_thumbnail = yt_frontend_playlist['playlist'][count]['items'][0]['snippet']['thumbnails']['default']['url']
 
-        yt_info_for_each_song = {'yt_video_id': video_id,
+        count += 1
+
+
+        yt_info_for_each_song = {'yt_video_id': yt_video_id,
                                  'video_title': video_title,
                                  'video_thumbnail': video_thumbnail,
                                  'searched_artist': artist_name,
                                  'searched_song': song_title,
                                  'artist_id': artist_id}
+
         contains_yt_playlist_info.append(yt_info_for_each_song)
 
-    print "YOUTUBE.PY, creates_yt_video_playlist, ", contains_yt_playlist_info
     return contains_yt_playlist_info
-
-        # for youtube table need: video title, video id, searched artist
-        # searched song, and artist id
-
-        # ******v doesn't make sense. turn into a dictionary with yt video ids
-        # for each_artist_name_and_artist_id in contains_artist_name_and_artist_id:
-        #     artist_name = each_artist_name_and_artist_id[0]
-        #     if artist_name == each_artist_and_song[0]:
-        #         artist_id = each_artist_name_and_artist_id[1]
-        #         video_id = parsed_search_results['video_id']
-        #         contains_video_ids.append(video_id)
-        #         adds_yt_video_info_to_db(parsed_search_results, each_artist_and_song, artist_id)
-
-    # print "api_helper, gets_yt_info_from_yt_api_for_playlist, contains_video_ids ", contains_video_ids
-    # return contains_video_ids
-
-
-
-def makes_playlist_of_yt_video_ids(contains_yt_playlist_info):
-    """Queries Youtube Video db and creates a playlist with video ids"""
-    # Parameter in list form
-
-    return contains_yt_playlist_info
-
 
 def create_yt_playlist_id():
     

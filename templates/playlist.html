@@ -25,7 +25,7 @@
     var js_data = {{ data|tojson|safe }};
     js_data = JSON.parse(js_data);
     console.log(js_data);
-    var ytVideoId = js_data[0]['yt_video_id'];
+    var ytVideoId = js_data['playlist'][0]['items'][0]['id']['videoId'];
     console.log(ytVideoId)
     player = new YT.Player('player', {
       height: '390',

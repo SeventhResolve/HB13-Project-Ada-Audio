@@ -62,14 +62,15 @@ def gets_user_serach_results():
     new_songs_added = adds_new_songs_to_db_by_en_id(yt_playlist_query)
     # from seed.py
     print "333333333333333"
-    yt_playlist = creates_yt_video_playlist(yt_playlist_query)
+    yt_frontend_playlist = creates_yt_frontend_playlist(yt_playlist_query)
     # from youtube.py
     print "444444444444444"
-    added_yt_playlist_info = adds_yt_video_info_to_db(yt_playlist)
+    yt_db_playlist = creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query)
+    print "555555555555555"
+    added_yt_playlist_info = adds_yt_video_info_to_db(yt_db_playlist)
     # from seed.py
-    print "55555555555555"
-    dict_of_playlist_videos = makes_playlist_of_yt_video_ids(yt_playlist)
-    print "66666666666666", yt_playlist
+    print "66666666666666"
+    
 
     yt_playlist_id = create_yt_playlist_id()
     # creates an empty playlist on youtube account
@@ -80,7 +81,7 @@ def gets_user_serach_results():
 
 
     # yt videoId in a dict to be passed to js playlist page
-    data = json.dumps(yt_playlist)
+    data = json.dumps(yt_frontend_playlist)
 
     
 
