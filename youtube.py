@@ -6,6 +6,17 @@ from sqlalchemy import exists
 import requests
 import os
 
+import httplib2
+import sys
+import json
+
+from apiclient.discovery import build
+from apiclient.errors import HttpError
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.file import Storage
+from oauth2client.tools import argparser, run_flow
+
+
 
 def yt_api_call(artist_and_song):
     """Gets JSON from youtube api"""
@@ -117,17 +128,6 @@ def creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query):
     return contains_yt_playlist_info
 
 def create_yt_playlist_id():
-    
-    import httplib2
-    import os
-    import sys
-    import json
-
-    from apiclient.discovery import build
-    from apiclient.errors import HttpError
-    from oauth2client.client import flow_from_clientsecrets
-    from oauth2client.file import Storage
-    from oauth2client.tools import argparser, run_flow
 
     # *** Following code provided by the YouTube API***
     # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
@@ -200,6 +200,26 @@ def create_yt_playlist_id():
     return playlist_id
 
 
+# def adds_video_to_session():
 
 
+#     en_key = os.environ['ECHO_NEST_API_KEY']
 
+#     snippet = {"snippet": {"playlistId": "PLQw3MSpSTHztPVmUz2yuOyOShXvJJ7XAc",
+#                            "resourceId": {"kind": "youtube#video",
+#                                           "videoId": "xo1VInw-SKc"}}}
+
+#     snippet = json.dumps(snippet)
+
+
+#     en_payload = {'part': snippet, 'key': en_key}
+
+#     r = requests.post("https://www.googleapis.com/youtube/v3/playlistItems?", data=en_payload)
+
+#     # Debugging print statement
+#     print (r.url)
+
+#     # binds dictionary from get request to variable
+#     dict_from_en_api = r.json()
+
+#     pprint(dict_from_en_api)

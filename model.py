@@ -116,10 +116,10 @@ class YouTubeVideo(db.Model):
 
     video_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     yt_video_id = db.Column(db.String(100), nullable=False, unique=True)
-    video_title = db.Column(db.String(100), nullable=False, unique=True)
+    video_title = db.Column(db.String(150), nullable=False, unique=True)
     video_thumbnail = db.Column(db.String(100), nullable=False, unique=True)
-    searched_artist = db.Column(db.String(50))
-    searched_song = db.Column(db.String(50))
+    searched_artist = db.Column(db.String(150))
+    searched_song = db.Column(db.String(150))
     artist_id = db.Column(db.Integer, 
                           db.ForeignKey("artists.artist_id"))
     

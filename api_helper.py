@@ -184,6 +184,8 @@ def gets_playlist_history(en_playlist_and_seed_en_song_id):
     # list of songs with song info as a dictionary
 
     en_song_id = en_playlist_and_seed_en_song_id[1]
+
+    print "ECHONEST SONG ID ********** ", en_song_id
     # get seed song info to add as first song in playlist
     song_object = Song.query.filter(Song.en_song_id == en_song_id).one()
     artist_id = song_object.artist_id
@@ -228,6 +230,7 @@ def creates_yt_playlist_query(artist_and_song):
     step_two = parses_en_json_results(step_one)
     en_session_id_and_en_song_id = generates_en_playlist_session_id(step_two)
     adds_en_session_id_to_db(en_session_id_and_en_song_id)
+    db.session.flush()
     en_playlist_and_seed_en_song_id = creates_en_playlist(en_session_id_and_en_song_id)
     yt_playlist_query = gets_playlist_history(en_playlist_and_seed_en_song_id)
     # list of current song and the next 5 songs that will play

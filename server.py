@@ -85,6 +85,13 @@ def gets_user_serach_results():
 
     
 
+    # adds_video_to_session()
+    # print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+
+
+
+
     return render_template('playlist.html',
                             data=data,
                             jinja_data=yt_frontend_playlist)
