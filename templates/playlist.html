@@ -4,6 +4,26 @@
 
 {% block content %}
 
+<br><br><br>
+
+<div class="col-lg-4"></div>
+  <div class="playlist-heading">Current Playlist
+    <div class="playlist-thumbnails">
+      <ul>
+
+        {% for video in jinja_data['playlist'] %}
+          <span><img id="thumbnails" src={{ video['items'][0]['snippet']['thumbnails']['default']['url'] }} 
+            alt={{ video['items'][0]['snippet']['title'] }}></span>
+        {% endfor %}
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<br><br><br>
+
+
 
 <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
 <div id="player"></div>

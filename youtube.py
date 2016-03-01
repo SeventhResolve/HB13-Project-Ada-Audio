@@ -30,7 +30,7 @@ def yt_api_call(artist_and_song):
     dict_from_yt_api = r.json()
 
     # Debugging print statement
-    # pprint(dict_from_yt_api)
+    pprint(dict_from_yt_api)
 
     print "ran gets_json_from_yt_api"
 

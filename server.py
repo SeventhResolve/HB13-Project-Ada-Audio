@@ -86,7 +86,8 @@ def gets_user_serach_results():
     
 
     return render_template('playlist.html',
-                            data=data)
+                            data=data,
+                            jinja_data=yt_frontend_playlist)
     
 
 ######################################
