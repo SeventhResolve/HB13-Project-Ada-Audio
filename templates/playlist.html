@@ -10,10 +10,9 @@
   <div class="playlist-heading">Current Playlist
     <div class="playlist-thumbnails">
       <ul>
-
-        {% for video in jinja_data['playlist'] %}
-          <span><img id="thumbnails" src={{ video['items'][0]['snippet']['thumbnails']['default']['url'] }} 
-            alt={{ video['items'][0]['snippet']['title'] }}></span>
+        {% for i in range(7) %}
+          <span><img id="{{ i }}" src={{ jinja_data['playlist'][i]['items'][0]['snippet']['thumbnails']['default']['url'] }} 
+            alt={{ jinja_data['playlist'][i]['items'][0]['snippet']['title'] }}></span>
         {% endfor %}
       </ul>
 
@@ -67,7 +66,7 @@
   //    The function indicates that when playing a video (state=1),
   //    the player should play for six seconds and then stop.
   var done = false;
-  var count = 1;
+  var count = 0;
   function onPlayerStateChange(event) {
     // if (event.data == YT.PlayerState.PLAYING && !done) {
     //   // setTimeout(stopVideo, 6000);
@@ -75,19 +74,32 @@
     // }
     if (event.data == YT.PlayerState.ENDED) {
       console.log(event);
+      if (count > 7) {
+        count === 0;
+      } else {
+        count++;
+      }
       var js_data = {{ data|tojson|safe }};
       js_data = JSON.parse(js_data);
-        var nextVideoId = js_data['playlist'][count]['items'][0]['id']['videoId'];
-        console.log(nextVideoId);
-        event.target.loadVideoById(nextVideoId);
-        event.target.playVideo();
-      count++;
+      var nextVideoId = js_data['playlist'][count]['items'][0]['id']['videoId'];
+      console.log(nextVideoId);
+      event.target.loadVideoById(nextVideoId);
+      event.target.playVideo();
+      for (var i=0; i<7; i++){
+        var selector = "#" + i.toString();
+        var index = (count + i) % 7;
+        var jpg_url = js_data['playlist'][index]['items'][0]['snippet']['thumbnails']['default']['url'];
+        console.log(jpg_url);
+        console.log(count);
+        console.log(selector);
+        $(selector).attr('src', jpg_url);
+      };
       console.log(count);
     }
   }
-  function stopVideo() {
-    player.stopVideo();
-  }
+  // function stopVideo() {
+  //   player.stopVideo();
+  // }
   // ##########################################################
   // Define some variables used to remember state.
 var playlistId, channelId;
