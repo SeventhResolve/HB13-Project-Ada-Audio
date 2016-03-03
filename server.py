@@ -9,6 +9,7 @@ from playlist_helper import *
 from api_helper import *
 from seed import *
 from youtube import *
+from genre_class import Genre
 
 import json
 
@@ -40,40 +41,44 @@ def gets_user_serach_results():
     song = request.args['song']
     genre = request.args['genre']
 
-    # print "GENRE GENRE GENRE ", genre
-
-    # Converts search into titles
-    artist_str = str(artist.title())
-    song_str = str(song.title())
-    # Need to make sure that str are in correct format for querying
-
-    artist_and_song = [artist_str, song_str]
-
-    print "server.py User search artist and song list ", artist_and_song
-
-    # checks user search for uniqueness and adds to db. 
-    # in api_helper.py
-    returns_artist_id = adds_unique_searches_to_database(artist_and_song)
+    if artist and song:
 
 
-    yt_playlist_query = creates_yt_playlist_query(artist_and_song)
-    # from api_helper.py, made by echonest
-    print "1111111111111111"
-    new_artists_added = adds_new_artists_to_db_by_en_id(yt_playlist_query)
-    # from seed.py
-    print "2222222222222222"
-    new_songs_added = adds_new_songs_to_db_by_en_id(yt_playlist_query)
-    # from seed.py
-    print "333333333333333"
-    yt_frontend_playlist = creates_yt_frontend_playlist(yt_playlist_query)
-    # from youtube.py
-    print "444444444444444"
-    yt_db_playlist = creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query)
-    print "555555555555555"
-    added_yt_playlist_info = adds_yt_video_info_to_db(yt_db_playlist)
-    # from seed.py
-    print "66666666666666"
-    
+        # Converts search into titles
+        artist_str = str(artist.title())
+        song_str = str(song.title())
+        # Need to make sure that str are in correct format for querying
+
+        artist_and_song = [artist_str, song_str]
+
+        print "server.py User search artist and song list ", artist_and_song
+
+        # checks user search for uniqueness and adds to db. 
+        # in api_helper.py
+        returns_artist_id = adds_unique_searches_to_database(artist_and_song)
+
+
+        yt_playlist_query = creates_yt_playlist_query(artist_and_song)
+        # from api_helper.py, made by echonest
+        print "1111111111111111"
+        new_artists_added = adds_new_artists_to_db_by_en_id(yt_playlist_query)
+        # from seed.py
+        print "2222222222222222"
+        new_songs_added = adds_new_songs_to_db_by_en_id(yt_playlist_query)
+        # from seed.py
+        print "333333333333333"
+        yt_frontend_playlist = creates_yt_frontend_playlist(yt_playlist_query)
+        # from youtube.py
+        print "444444444444444"
+        yt_db_playlist = creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query)
+        print "555555555555555"
+        added_yt_playlist_info = adds_yt_video_info_to_db(yt_db_playlist)
+        # from seed.py
+        print "66666666666666"
+
+    # if genre:
+        # use genre class methods here
+        
 
     yt_playlist_id = create_yt_playlist_id()
     # creates an empty playlist on youtube account

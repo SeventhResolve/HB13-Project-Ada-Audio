@@ -1,7 +1,6 @@
 from model import db, Artist, Song, Playlist, SongPlaylist, YouTubeVideo
 from pprint import pprint
 from sqlalchemy import exists
-# from server import *
 
 import requests
 import os
@@ -127,9 +126,10 @@ def creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query):
 
     return contains_yt_playlist_info
 
+
 def create_yt_playlist_id():
 
-    # *** Following code provided by the YouTube API***
+    # *** THE FOLLOWING CODE IS PROVIDED BY THE YOUTUBE DATA API***
     # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
     # the OAuth 2.0 information for this application, including its client_id and
     # client_secret. You can acquire an OAuth 2.0 client ID and client secret from
@@ -200,26 +200,7 @@ def create_yt_playlist_id():
     return playlist_id
 
 
-# def adds_video_to_session():
 
 
-#     en_key = os.environ['ECHO_NEST_API_KEY']
-
-#     snippet = {"snippet": {"playlistId": "PLQw3MSpSTHztPVmUz2yuOyOShXvJJ7XAc",
-#                            "resourceId": {"kind": "youtube#video",
-#                                           "videoId": "xo1VInw-SKc"}}}
-
-#     snippet = json.dumps(snippet)
 
 
-#     en_payload = {'part': snippet, 'key': en_key}
-
-#     r = requests.post("https://www.googleapis.com/youtube/v3/playlistItems?", data=en_payload)
-
-#     # Debugging print statement
-#     print (r.url)
-
-#     # binds dictionary from get request to variable
-#     dict_from_en_api = r.json()
-
-#     pprint(dict_from_en_api)
