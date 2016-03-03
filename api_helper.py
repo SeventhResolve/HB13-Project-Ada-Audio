@@ -118,7 +118,8 @@ def queries_song_db(artist_and_song):
                 song_artist_bool = (song_artist_id == artist_id)
                 contains_true_or_false.append(song_artist_bool)
 
-                print contains_true_or_false
+                # Debugging print statement
+                # print contains_true_or_false
 
         # If the list contains a True value, the song exists in the db.
         # If the list is all False then the search is a unique song/artist combo  

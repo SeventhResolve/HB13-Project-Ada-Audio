@@ -9,7 +9,7 @@ import json
 class Genre(object):
 
     def __init__(self, genre):
-        print "Searched genre", genre
+        print "Creates a statis genre playlist", genre
         self.genre = genre
 
     def creates_genre_en_playlist(self):
@@ -68,7 +68,7 @@ class Genre(object):
 
 
 if __name__ == '__main__':
-    print "Yay I made a class :D"
+    print "Yay I made a GENRE class :D"
 
 
 

@@ -40,6 +40,7 @@ def gets_user_serach_results():
     artist = request.args['artist']
     song = request.args['song']
     genre = request.args['genre']
+    # tempo = request.args['tempo']
 
     if artist and song:
 
@@ -76,8 +77,14 @@ def gets_user_serach_results():
         # from seed.py
         print "66666666666666"
 
-    # if genre:
-        # use genre class methods here
+    if genre:
+        genre = Genre(str(genre))
+        genre_playlist = genre.creates_genre_playlist()
+        yt_search_playlist = genre.extracts_artist_and_song(genre_playlist)
+        yt_frontend_playlist = genre.creates_yt_playlist(yt_search_playlist)
+
+    # if tempo:
+        # ******** do tempo playlisting stuff here
         
 
     yt_playlist_id = create_yt_playlist_id()
