@@ -6,7 +6,7 @@ import requests
 import os
 
 
-def gets_json_from_en_api(artist_and_song):
+def gets_artist_and_song_json_from_en_api(artist_and_song):
     """If songs aren't in db, get the api jsons"""
 
     en_key = os.environ['ECHO_NEST_API_KEY']
@@ -16,6 +16,28 @@ def gets_json_from_en_api(artist_and_song):
     en_payload = {'title': artist_and_song[1], 'artist': artist_and_song[0]}
 
     r = requests.get("http://developer.echonest.com/api/v4/song/search?api_key=%(en_key)s&format=json&results=1&" % locals(), params=en_payload)
+    
+    # Debugging print statement
+    print (r.url)
+
+    # binds dictionary from get request to variable
+    dict_from_en_api = r.json()
+
+    # Debugging print statement
+    pprint(dict_from_en_api)
+
+    return dict_from_en_api
+
+def gets_genre_json_from_en_api(genre):
+    "Gets a playlist JSON based on genre"
+
+    en_key = os.environ['ECHO_NEST_API_KEY']
+
+    print "seed, gets_genre_json_from_en_api ", genre
+
+    en_payload = {'genre': genre, 'results': 7, 'type': 'genre-radio', 'format': 'json'}
+
+    r = requests.get("http://developer.echonest.com/api/v4/song/static?api_key=%(en_key)s&format=json&results=1&" % locals(), params=en_payload)
     
     # Debugging print statement
     print (r.url)

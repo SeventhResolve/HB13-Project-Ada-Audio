@@ -29,7 +29,7 @@ def index():
 
     return render_template('homesearchpage.html')
 
-@app.route('/search_playlistafy')
+@app.route('/playlist')
 def gets_user_serach_results():
     """Converts search into EchoNest GET request and inserts JSON object
     into database"""
@@ -38,6 +38,9 @@ def gets_user_serach_results():
 
     artist = request.args['artist']
     song = request.args['song']
+    genre = request.args['genre']
+
+    # print "GENRE GENRE GENRE ", genre
 
     # Converts search into titles
     artist_str = str(artist.title())

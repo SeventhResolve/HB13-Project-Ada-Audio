@@ -138,7 +138,7 @@ def song_populate_database(artist_and_song):
 
     print "populating db! with ", artist_and_song
 
-    step_one = gets_json_from_en_api(artist_and_song)
+    step_one = gets_artist_and_song_json_from_en_api(artist_and_song)
     print "api helper, populate_database Step one complete!"
     step_two = parses_en_json_results(step_one)
     print "api helper, populate_database Step two complete!"
@@ -226,7 +226,7 @@ def creates_yt_playlist_query(artist_and_song):
     """Creates an en playlist"""
     # parsed_search_results from seed.py, parses_en_json_results(dict_from_en_api)
 
-    step_one = gets_json_from_en_api(artist_and_song)
+    step_one = gets_artist_and_song_json_from_en_api(artist_and_song)
     step_two = parses_en_json_results(step_one)
     en_session_id_and_en_song_id = generates_en_playlist_session_id(step_two)
     adds_en_session_id_to_db(en_session_id_and_en_song_id)
@@ -239,6 +239,7 @@ def creates_yt_playlist_query(artist_and_song):
     print "))))))))))))))))))) ", yt_playlist_query
 
     return yt_playlist_query
+
 
 
 
