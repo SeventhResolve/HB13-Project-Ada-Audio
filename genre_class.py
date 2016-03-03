@@ -9,7 +9,7 @@ import json
 class Genre(object):
 
     def __init__(self, genre):
-        print "Creates a statis genre playlist", genre
+        print "Creates a static genre playlist", genre
         self.genre = genre
 
     def creates_genre_en_playlist(self):
@@ -17,9 +17,9 @@ class Genre(object):
 
         en_key = os.environ['ECHO_NEST_API_KEY']
 
-        print "seed, gets_genre_json_from_en_api ", self
+        print "seed, gets_genre_json_from_en_api ", self.genre
 
-        r = requests.get("http://developer.echonest.com/api/v4/playlist/static?api_key=%s&genre=%s&format=json&results=7&type=genre-radio" % (en_key, self))
+        r = requests.get("http://developer.echonest.com/api/v4/playlist/static?api_key=%s&genre=%s&format=json&results=7&type=genre-radio" % (en_key, self.genre))
        
         # Debugging print statement
         print (r.url)
@@ -35,6 +35,9 @@ class Genre(object):
 
     def extracts_artist_and_song(self, genre_playlist):
         """Extracts artist and song from genre_playlist to query youtube api"""
+
+        print "genre_class, extracts_artist_and_song, genre_playlist ", genre_playlist
+
         num_songs = len(genre_playlist['response']['songs'])
         count = 0
         yt_search_playlist =[]

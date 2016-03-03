@@ -79,7 +79,8 @@ def gets_user_serach_results():
 
     if genre:
         genre = Genre(str(genre))
-        genre_playlist = genre.creates_genre_playlist()
+        print genre
+        genre_playlist = genre.creates_genre_en_playlist()
         yt_search_playlist = genre.extracts_artist_and_song(genre_playlist)
         yt_frontend_playlist = genre.creates_yt_playlist(yt_search_playlist)
 
