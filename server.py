@@ -10,6 +10,7 @@ from api_helper import *
 from seed import *
 from youtube import *
 from genre_class import Genre
+from artist_class import Artist
 
 import json
 
@@ -37,10 +38,11 @@ def gets_user_serach_results():
 
    
 
-    artist = request.args['artist']
+    artist = request.args['s_artist']
     song = request.args['song']
     genre = request.args['genre']
-    # tempo = request.args['tempo']
+    artist_pl = request.args['artist']
+
 
     if artist and song:
 
@@ -84,8 +86,12 @@ def gets_user_serach_results():
         yt_search_playlist = genre.extracts_artist_and_song(genre_playlist)
         yt_frontend_playlist = genre.creates_yt_playlist(yt_search_playlist)
 
-    # if tempo:
-        # ******** do tempo playlisting stuff here
+    if artist_pl:
+        artist_pl = Artist(str(artist_pl))
+        print artist_pl
+        artist_playlist = artist_pl.creates_artist_en_playlist()
+        yt_search_playlist = artist_pl.extracts_artist_and_song(artist_playlist)
+        yt_frontend_playlist = artist_pl.creates_yt_playlist(yt_search_playlist)
         
 
     yt_playlist_id = create_yt_playlist_id()

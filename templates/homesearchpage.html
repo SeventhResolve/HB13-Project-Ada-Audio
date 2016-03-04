@@ -8,17 +8,23 @@
 <body>
     <form action='/playlist'>
         <h3>Create Playlist by:</h3>
-        <h4>Artist and Song Playlist</h4>
+        <h4>Song Playlist</h4>
         Artist
-        <input type='text' name='artist'>
+        <input type='text' name='s_artist' class='song'>
     <br>
         Song Title
-        <input type='text' name='song'>
+        <input type='text' name='song' class="song">
+    <br>
+    <br>
+        <h4>Artist Playlist</h4>
+        Artist
+        <input type='text' name='artist' id='artist'>
     <br>
     <br>
         <h4>Genre Playlist</h4>
         Genre
         <input type='text' name='genre' id='genre'>
+    <br>
     <br>
         <input type='submit' value='Make Playlist'>
     </form>
