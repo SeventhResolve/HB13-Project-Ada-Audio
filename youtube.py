@@ -112,7 +112,6 @@ def creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query):
         video_title = yt_frontend_playlist['playlist'][count]['items'][0]['snippet']['title']
         video_thumbnail = yt_frontend_playlist['playlist'][count]['items'][0]['snippet']['thumbnails']['default']['url']
 
-        count += 1
         
         items = yt_frontend_playlist['playlist'][count]['items']
 
