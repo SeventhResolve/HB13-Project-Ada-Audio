@@ -114,7 +114,7 @@ def creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query):
 
         count += 1
 
-
+        
         yt_info_for_each_song = {'yt_video_id': yt_video_id,
                                  'video_title': video_title,
                                  'video_thumbnail': video_thumbnail,
