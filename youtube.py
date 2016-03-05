@@ -113,16 +113,29 @@ def creates_yt_db_playlist(yt_frontend_playlist, yt_playlist_query):
         video_thumbnail = yt_frontend_playlist['playlist'][count]['items'][0]['snippet']['thumbnails']['default']['url']
 
         count += 1
-
         
-        yt_info_for_each_song = {'yt_video_id': yt_video_id,
-                                 'video_title': video_title,
-                                 'video_thumbnail': video_thumbnail,
-                                 'searched_artist': artist_name,
-                                 'searched_song': song_title,
-                                 'artist_id': artist_id}
+        items = yt_frontend_playlist['playlist'][count]['items']
 
-        contains_yt_playlist_info.append(yt_info_for_each_song)
+        if items == []:
+            continue
+        else:
+            yt_video_id = items[0]['id']['videoId']
+            video_title = items[0]['snippet']['title']
+            video_thumbnail = items[0]['snippet']['thumbnails']['default']['url']
+
+            count += 1
+
+
+
+            yt_info_for_each_song = {'yt_video_id': yt_video_id,
+                                     'video_title': video_title,
+                                     'video_thumbnail': video_thumbnail,
+                                     'searched_artist': artist_name,
+                                     'searched_song': song_title,
+                                     'artist_id': artist_id}
+
+            contains_yt_playlist_info.append(yt_info_for_each_song)
+
 
     return contains_yt_playlist_info
 
