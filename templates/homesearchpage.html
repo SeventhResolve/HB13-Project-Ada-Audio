@@ -5,31 +5,45 @@
 {% block content %}
 
 
-<body>
-    <form action='/playlist'>
-        <h3>Create Playlist by:</h3>
+<!-- <div class="">
+</div> -->
+<br>
+<form class='col-xs-12' action='/playlist'>
+    <br>
+    <br>
+    <h3 class='playlist_title'>Pick a Playlist Option:</h3>
+    <br>
+    <br>
+    <span class='col-xs-4'>
+        <div>
         <h4>Song Playlist</h4>
         Artist
         <input type='text' name='s_artist' class='song'>
-    <br>
+        </div>
+        <div>
         Song Title
         <input type='text' name='song' class="song">
-    <br>
-    <br>
+        </div>
+    </span>
+    <span class='col-xs-4'>
         <h4>Artist Playlist</h4>
         Artist
         <input type='text' name='artist' id='artist'>
-    <br>
-    <br>
+    </span>
+    <span class='col-xs-4'>
         <h4>Genre Playlist</h4>
         Genre
         <input type='text' name='genre' id='genre'>
-    <br>
-    <br>
-        <input type='submit' value='Make Playlist'>
-    </form>
-</body>
-</html>
+    </span>
+    <div class='col-xs-12'>
+        <br>
+        <br>
+        <input id='submit_button' type='submit' value='Make Playlist'>
+        <br>
+        <br>
+        <br>
+    </div>
+</form>
 
 
 

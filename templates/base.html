@@ -3,14 +3,18 @@
 <head>
     <title>{% block title %}TITLE GOES HERE{% endblock %}</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="/static/css/styles.css"> -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script src="http://code.jquery.com/jquery.js"></script>
 </head>
 <body>
-    <h1>Ada Audio</h1><br>
+    <br>
+    <h1>Ada Audio</h1><br><br>
     {% block content %}BODY CONTENT GOES HERE{% endblock %}
     <br>
-    <footer>Hackbright Project: Ada Audio<br>
+    <footer>
+        Hackbright Project: Ada Audio<br>
         Kristin Parke<br>
         linkedin.com/in/kparke    
     </footer>
