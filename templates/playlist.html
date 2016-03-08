@@ -11,6 +11,12 @@
         {% for i in range(7) %}
           <span><img id="{{ i }}" data-toggle="tooltip" data-placement="bottom" src={{ jinja_data['playlist'][i]['items'][0]['snippet']['thumbnails']['default']['url'] }} 
             title="{{ jinja_data['playlist'][i]['items'][0]['snippet']['title'] }}"></span>
+          <!-- tooltips do not change as videos change -->
+
+
+          <!-- <span><img id="{{ i }}" src={{ jinja_data['playlist'][i]['items'][0]['snippet']['thumbnails']['default']['url'] }}
+                      title={{ jinja_data['playlist'][i]['items'][0]['snippet']['title'] }}</span> -->
+
         {% endfor %}
       </ul>
 
@@ -29,9 +35,11 @@
 <script>
   "use strict";
 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
+// $(function () {
+//   $('[data-toggle="tooltip"]').tooltip()
+// })
+// tooltip doesn't change as thumbnails change
+
 
   // 2. This code loads the IFrame Player API code asynchronously.
   var tag = document.createElement('script');
@@ -92,10 +100,15 @@ $(function () {
         var selector = "#" + i.toString();
         var index = (count + i) % 7;
         var jpg_url = js_data['playlist'][index]['items'][0]['snippet']['thumbnails']['default']['url'];
+        var title = js_data['playlist'][index]['items'][0]['snippet']['title'];
+
         console.log(jpg_url);
         console.log(count);
         console.log(selector);
         $(selector).attr('src', jpg_url);
+        $(selector).attr('title', title);
+      
+
       };
       console.log(count);
     }
