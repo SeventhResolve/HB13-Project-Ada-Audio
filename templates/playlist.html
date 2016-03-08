@@ -4,15 +4,13 @@
 
 {% block content %}
 <div class="thumb-player">
-<br>
-<br>
 <div class="col-lg-12">
   <div class="playlist-heading">Current Playlist
     <div class="playlist-thumbnails">
       <ul>
         {% for i in range(7) %}
-          <span><img id="{{ i }}" src={{ jinja_data['playlist'][i]['items'][0]['snippet']['thumbnails']['default']['url'] }} 
-            alt={{ jinja_data['playlist'][i]['items'][0]['snippet']['title'] }}></span>
+          <span><img id="{{ i }}" data-toggle="tooltip" data-placement="bottom" src={{ jinja_data['playlist'][i]['items'][0]['snippet']['thumbnails']['default']['url'] }} 
+            title="{{ jinja_data['playlist'][i]['items'][0]['snippet']['title'] }}"></span>
         {% endfor %}
       </ul>
 
@@ -32,6 +30,10 @@
 
 <script>
   "use strict";
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
   // 2. This code loads the IFrame Player API code asynchronously.
   var tag = document.createElement('script');

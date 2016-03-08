@@ -1,0 +1,112 @@
+html, body {
+  height: 100%;
+  background-image: url('synth_bkgrd.jpg');
+  background-size: 100%;
+}
+
+h1 {
+  font-family: Arial, sans-serif;
+  font-size:50px;
+  color: #990000;
+}
+
+h3 {
+  text-align: center;
+}
+
+
+.playlist_title {
+  margin: 0 auto;
+  width: 20%;
+}
+
+.song {
+  color:#000000;
+}
+
+.artist {
+  color:#000000;
+
+}
+
+.genre {
+  color: #000000;
+}
+
+
+.col-xs-4 {
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
+
+.col-xs-12 {
+  margin: 0 auto;
+  width: 100%;
+}
+
+#submit_button {
+  color:#1a1a1a;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 20%;
+}
+
+
+#player {
+  display: block;
+  opacity: 1.0;
+  margin-right: auto;
+  margin-left: auto;
+  width: 50%;
+}
+
+.playlist-heading {
+  text-align: center;
+  background-color: #1a1a1a;
+  color:#eee;
+}
+
+.playlist-thumbnails {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+
+/* Custom container */
+form {
+  background-color: #4d4d4d;
+  opacity: 0.9;
+  margin: 0 auto;
+  width: 100%;
+  min-height:100%;
+  color:#d9d9d9;
+  overflow:hidden;
+}
+
+.thumb-player {
+  background-color: #4d4d4d;
+  opacity: 0.9;
+  margin: 0 auto;
+  width: 100%;
+  min-height:100%;
+  color:#d9d9d9;
+  overflow:hidden;
+}
+
+footer {
+  color: #bfbfbf;
+}
+
+.container-full a {
+  color:#efefef;
+  text-decoration:none;
+}
+
+.v-center {
+  margin-top:7%;
+}
+  
