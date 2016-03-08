@@ -7,12 +7,12 @@ adaΩaudio is a fullstack music media application that facilitates discovery of 
 ### Homepage
 Enter the information for one of the playlists and press submit.
 
-![ada-homepage.png](ada_audio/static/css/ada-homepage.png)
+![ada-homepage.png](https://github/SeventhResolve/HB13-Project-Ada-Audio/raw/master/static/img/ada-homepage.png)
 
 ### Playlist Page
 The video playlist will automatically start playing. Hover the mouse over the thumbnails to see the song title and artists in the playlist. Right click on the video and select 'loop' to repeat a single song.
 
-![ada-song-playlist.png](ada_audio/static/css/ada-song-playlist.png)
+![ada-song-playlist.png](https://github/SeventhResolve/HB13-Project-Ada-Audio/raw/master/static/img/ada-song-playlist.png)
 
 ### Technologies:
 Python, Flask, JavaScript,SQLAlchemy, EchoNest API, jQuery, PostgreSQL, Bootstrap, Jinja, YouTube API, OAuth
