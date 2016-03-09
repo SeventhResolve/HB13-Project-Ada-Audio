@@ -24,3 +24,16 @@ Skip to your favorite song or remove the songs you dislike before you listen to 
 Like or dislike songs to further customized your playlist to your musical tastes.
 ##### Genre Charts
 If someone asked you what your favorite type of music is, would you have an answer? Ada 2.0 will show you a chart of your favorite and least favorite genres based on the songs that are liked and disliked.
+
+### Installation
+To run Ada on your own machine, 
+
+$ git clone https-url of project
+$ cd HB13-Project-Ada-Audio
+$ virtualenv env
+$ source env/bin/activate
+$ source secrets.sh
+$ pip install -r requirements.txt
+$ python server.py
+
+Runs on localhost:5000
