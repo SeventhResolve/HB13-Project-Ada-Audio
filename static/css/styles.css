@@ -34,11 +34,11 @@ h3 {
 }
 
 
-.col-xs-4 {
+./*col-xs-4 {
   margin-right: auto;
   margin-left: auto;
   display: block;
-}
+}*/
 
 .col-xs-12 {
   margin: 0 auto;
