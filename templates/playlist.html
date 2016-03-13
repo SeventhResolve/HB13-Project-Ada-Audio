@@ -9,7 +9,7 @@
     <div class="playlist-thumbnails">
       <ul>
         {% for i in range(7) %}
-          <span><img id="{{ i }}" data-toggle="tooltip" data-placement="bottom" src={{ jinja_data['playlist'][i]['items'][0]['snippet']['thumbnails']['default']['url'] }} 
+          <span><img id="{{ i }}" data-toggle="tooltip" data-placement="bottom" src={{ jinja_data['playlist'][i]['items'][0]['snippet']['thumbnails']['default']['url'] }} title="{{ jinja_data['playlist'][i]['items'][0]['snippet']['title'] }}"></span>
         {% endfor %}
       </ul>
 
