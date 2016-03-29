@@ -28,7 +28,7 @@ If someone asked you what your favorite type of music is, would you have an answ
 ### Installation
 To run Ada on your own machine, 
 
-$ git clone <insert https-url of project> <br />
+$ git clone https://github.com/seventhresolve/HB13-Project-Ada-Audio <br />
 $ cd HB13-Project-Ada-Audio <br />
 $ virtualenv env <br />
 $ source env/bin/activate <br />
