@@ -28,12 +28,12 @@ If someone asked you what your favorite type of music is, would you have an answ
 ### Installation
 To run Ada on your own machine, 
 
-$ git clone https-url of project
-$ cd HB13-Project-Ada-Audio
-$ virtualenv env
-$ source env/bin/activate
-$ source secrets.sh
-$ pip install -r requirements.txt
-$ python server.py
+$ git clone <insert https-url of project> <br />
+$ cd HB13-Project-Ada-Audio <br />
+$ virtualenv env <br />
+$ source env/bin/activate <br />
+$ source secrets.sh <br />
+$ pip install -r requirements.txt <br />
+$ python server.py <br />
 
 Runs on localhost:5000

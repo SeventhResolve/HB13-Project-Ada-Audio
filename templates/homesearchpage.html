@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}adaΩaudio{% endblock %}
+{% block title %}adaΩaudio Homepage{% endblock %}
 
 {% block content %}
 
@@ -15,25 +15,31 @@
     <br>
     <br>
     <span class='col-xs-4'>
-        <h4>By Artist Playlist</h4>
-        Artist
-        <input type='text' name='artist' class='artist'>
-    </span>
-    <span class='col-xs-4'>
-        <div>
-        <h4>By Song Playlist</h4>
-        Artist
-        <input type='text' name='s_artist' class='song'>
-        </div>
-        <div>
-        Song Title
-        <input type='text' name='song' class="song">
+        <div class='playlist-option'>
+            <h4>By Artist Playlist</h4>
+            Artist
+            <input type='text' name='artist' class='artist'>
         </div>
     </span>
     <span class='col-xs-4'>
-        <h4>By Genre Playlist</h4>
-        Genre
-        <input type='text' name='genre' class='genre'>
+        <div class='playlist-option'>
+            <div>
+            <h4>By Song Playlist</h4>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Artist
+            <input type='text' name='s_artist' class='song'>
+            </div>
+            <div>
+            Song Title
+            <input type='text' name='song' class='song'>
+            </div>
+        </div>
+    </span>
+    <span class='col-xs-4'>
+        <div class='playlist-option'>
+            <h4>By Genre Playlist</h4>
+            Genre
+            <input type='text' name='genre' class='genre'>
+        </div>
     </span>
     <div class='col-xs-12'>
         <br>

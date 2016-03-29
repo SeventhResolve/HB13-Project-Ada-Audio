@@ -10,7 +10,7 @@ h1 {
   color: #990000;
 }
 
-h3 {
+h3, h4 {
   text-align: center;
 }
 
@@ -34,11 +34,16 @@ h3 {
 }
 
 
-./*col-xs-4 {
+.col-xs-4 {
   margin-right: auto;
   margin-left: auto;
   display: block;
-}*/
+  margin: 0 auto;
+}
+
+.playlist-option {
+  text-align: center
+}
 
 .col-xs-12 {
   margin: 0 auto;
@@ -51,6 +56,8 @@ h3 {
   margin-right: auto;
   display: block;
   width: 20%;
+  border: 0 solid;
+  border-radius: 5px;
 }
 
 
@@ -62,9 +69,10 @@ h3 {
   width: 50%;
 }
 
+
 .playlist-heading {
   text-align: center;
-  /*background-color: #1a1a1a;*/
+  background-color: #1a1a1a;
   color:#eee;
 }
 
@@ -95,6 +103,8 @@ form {
   min-height:80%;
   color:#d9d9d9;
   overflow:hidden;
+  border-top: 10px solid #0d0d0d;
+  border-bottom: 10px solid #0d0d0d;
 }
 
 footer {

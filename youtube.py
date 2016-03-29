@@ -183,6 +183,7 @@ def create_yt_playlist_id():
         message=MISSING_CLIENT_SECRETS_MESSAGE,
         scope=YOUTUBE_READ_WRITE_SCOPE)
 
+
     storage = Storage("%s-oauth2.json" % sys.argv[0])
     credentials = storage.get()
 
@@ -192,6 +193,8 @@ def create_yt_playlist_id():
 
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
         http=credentials.authorize(httplib2.Http()))
+
+    print credentials
 
     # This code creates a new, private playlist in the authorized user's channel.
     playlists_insert_response = youtube.playlists().insert(
