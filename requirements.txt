@@ -15,7 +15,7 @@ pyasn1==0.1.9
 pyasn1-modules==0.0.8
 pyechonest==9.0.0
 requests==2.5.0
-rsa==3.3
+rsa==4.1
 simplejson==3.8.2
 six==1.10.0
 SQLAlchemy==1.0.11
