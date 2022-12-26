@@ -22,4 +22,4 @@ SQLAlchemy==1.0.11
 uritemplate==0.6
 urllib3==1.14
 Werkzeug==0.11.3
-wheel==0.26.0
+wheel==0.38.1
